@@ -4,7 +4,7 @@ from mysql.connector import errorcode
 db_name = 'Formula1_database'
 
 try:
-    mydb = mysql.connector.connect(host='localhost', user='root', password='#MySQLDemi2022',
+    mydb = mysql.connector.connect(host='localhost', user='root', password='Tazzadargento_90',
                          auth_plugin='mysql_native_password')  # you can add the auth_plugin here too (ref line 26)
     if mydb.is_connected():
         mycursor = mydb.cursor()
@@ -19,5 +19,5 @@ try:
 
         mycursor.execute("CREATE DATABASE " + db_name)
         print("Database is created")
-except Error as e:
+except errorcode as e:
     print("Error while connecting to MySQL", e)
