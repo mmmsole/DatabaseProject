@@ -21,17 +21,21 @@ mycursor = mydb.cursor()
 #create tables
 TABLES = {}
 
+# Modifiche fatte:
+'''
+TABELLA Circuits:
+- eliminata colonna latitudine (INT)
+- eliminata colonna longitudine (INT)
+- eliminata colonna altitudine (INT)
+- eliminata colonna url (VARCHAR(200))
+'''
 TABLES['Circuits'] = (
         '''CREATE TABLE CIRCUITS (
           circuitId INT PRIMARY KEY,
           circuitRef VARCHAR(40),
-          name_ VARCHAR(80),
+          name VARCHAR(80),
           location VARCHAR(100),
-          country VARCHAR(80),
-          lat INT,
-          lng INT,
-          alt INT,
-          url VARCHAR(200))
+          country VARCHAR(80)
         ''')
 
 TABLES['Drivers'] = (
@@ -60,38 +64,28 @@ TABLES['Races'] = (
                 REFERENCES CIRCUITS (circuitId) ON DELETE CASCADE)
         ''')
 
-
+#THIS TABLE REPRESENTS A RELATIONSHIP (MANY TO MANY)
+#Modifiche fatte
+'''
+TABELLA Results:
+- eliminata colonna number: number INT NOT NULL
+- eliminata colonna laps: laps INT NOT NULL
+- da aggiungere tre colonne al diagramma: numFastLap, timeFastLap, speedFastLap
+'''
 TABLES['Results'] = (
         '''CREATE TABLE RESULTS (
           resultId INT PRIMARY KEY,
           raceId INT,
           driverId INT,
-          number INT NOT NULL,
           gridPosition INT NOT NULL,
+          finalPos INT NOT NULL
           points INT NOT NULL,
-          laps INT NOT NULL,
-          timems INT NOT NULL,
           numFastLap INT NOT NULL,
           timeFastLap TIME NOT NULL,
           speedFastLap INT NOT NULL,
           CONSTRAINT RESULTS_ibfk_2 FOREIGN KEY (raceId)
             REFERENCES RACES (raceId) ON DELETE CASCADE,
           CONSTRAINT RESULTS_ibfk_3 FOREIGN KEY (driverId)
-            REFERENCES DRIVERS (driverId) ON DELETE CASCADE)
-        ''')
-
-
-TABLES['DriverStandings'] = (
-        '''CREATE TABLE DRIVERSTANDINGS (
-          driverStandingsId INT,
-          raceId INT,
-          driverId INT,
-          points INT,
-          champPosition INT,
-          numberWins INT,
-          CONSTRAINT DRIVERSTANDINGS_ibfk_2 FOREIGN KEY (raceId)
-            REFERENCES RACES (raceId) ON DELETE CASCADE,
-          CONSTRAINT DRIVERSTANDINGS_ibfk_3 FOREIGN KEY (driverId)
             REFERENCES DRIVERS (driverId) ON DELETE CASCADE)
         ''')
 
@@ -109,6 +103,21 @@ TABLES['Pitstop'] = (
           CONSTRAINT PITSTOP_ibfk_2 FOREIGN KEY (driverId)
             REFERENCES DRIVERS (driverId) ON DELETE CASCADE)
         ''')
+
+
+#Aggiungo tabella LapTimes
+TABLES['LapTimes'] = (
+        '''CREATE TABLE LAPTIMES (
+          raceID INT PRIMARY KEY,
+          driverID INT PRIMARY KEY,
+          lap INT PRIMARY KEY,
+          position INT,
+          time time,
+          ms INT,
+          
+        ''')
+
+
 
 
 for table_name in TABLES:
