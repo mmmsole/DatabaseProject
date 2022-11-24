@@ -12,7 +12,7 @@ results = results.drop( columns = 'positionText')
 mydb = mysql.connector.connect(
   host="localhost",
   user="root",
-  password="Tazzadargento_90",
+  password="ciaociao",
   database= db_name
 )
 
@@ -41,9 +41,9 @@ TABLES['Circuits'] = (
 TABLES['Drivers'] = (
         '''CREATE TABLE DRIVERS (
           driverId INT PRIMARY KEY,
-          driverRef VARCHAR(20) UNIQUE NOT NULL,
-          number INT NOT NULL,
-          code VARCHAR(10),
+          driverRef VARCHAR(40) UNIQUE,
+          number INT, 
+          code VARCHAR(20),
           name VARCHAR(80),
           surname VARCHAR(80),
           dateOfBirth DATE,
