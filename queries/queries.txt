@@ -12,7 +12,6 @@ Further queries
 1.	List the total points scored by each driver having Italian nationality
 2.	List of all drivers who have never won a race
 
-
 Solution Max vs Lewis
 1)
 
