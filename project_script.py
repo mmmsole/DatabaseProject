@@ -54,7 +54,7 @@ TABLES['Drivers'] = (
 TABLES['Races'] = (
         '''CREATE TABLE RACES (
           raceId INT PRIMARY KEY,
-          raceYear YEAR,
+          raceYear INT,
           raceNumber INT,
           circuitId INT,
           raceName VARCHAR(80),
@@ -62,7 +62,7 @@ TABLES['Races'] = (
           raceTime TIME,
           CONSTRAINT RACES_ibfk_4 FOREIGN KEY (circuitId)
                 REFERENCES CIRCUITS (circuitId) ON DELETE CASCADE)
-        ''')
+        ''') # check on delete cascade
 
 #THIS TABLE REPRESENTS A RELATIONSHIP (MANY TO MANY)
 #Modifiche fatte
@@ -77,12 +77,10 @@ TABLES['Results'] = (
           resultId INT PRIMARY KEY,
           raceId INT,
           driverId INT,
-          gridPosition INT NOT NULL,
-          finalPos INT NOT NULL
-          points INT NOT NULL,
-          numFastLap INT NOT NULL,
-          timeFastLap TIME NOT NULL,
-          speedFastLap INT NOT NULL,
+          gridPos INT,
+          finalPos INT,
+          points FLOAT,
+          fastLap INT,
           CONSTRAINT RESULTS_ibfk_2 FOREIGN KEY (raceId)
             REFERENCES RACES (raceId) ON DELETE CASCADE,
           CONSTRAINT RESULTS_ibfk_3 FOREIGN KEY (driverId)
@@ -94,10 +92,11 @@ TABLES['Pitstop'] = (
         '''CREATE TABLE PITSTOP (
           raceId INT,
           driverId INT,
-          stopNumber INT PRIMARY KEY,
+          stopNumber INT,
           lapNumber INT,
-          timePitstop TIME,
+          timePitStop TIME,
           duration FLOAT,
+          PRIMARY KEY (raceId, driverId, stopNumber)
           CONSTRAINT PITSTOP_ibfk_1 FOREIGN KEY (raceId)
             REFERENCES RACES (raceId) ON DELETE CASCADE,
           CONSTRAINT PITSTOP_ibfk_2 FOREIGN KEY (driverId)
@@ -112,15 +111,21 @@ TABLES['LapTimes'] = (
           driverID INT PRIMARY KEY,
           lap INT PRIMARY KEY,
           position INT,
-          time time,
           ms INT,
           CONSTRAINT LAPTIMES_ibfk_1 FOREIGN KEY (raceId)
             REFERENCES RACES (raceId) ON DELETE CASCADE,
           CONSTRAINT LAPTIMES_ibfk_2 FOREIGN KEY (driverId)
             REFERENCES DRIVERS (driverId) ON DELETE CASCADE)
-        ''')
+        ''')  # USE SEC_TO_TIME
 
-
+CREATE DEFINER=`root`@`localhost` FUNCTION `ConvertTimeDelta`(duration int) RETURNS
+varchar(20) CHARSET utf8mb4
+    DETERMINISTIC
+BEGIN
+ DECLARE time_delta VARCHAR(20);
+ SET time_delta = TIME_FORMAT(SEC_TO_TIME(duration/1000), date_format);
+ RETURN time_delta;
+END
 
 
 for table_name in TABLES:
