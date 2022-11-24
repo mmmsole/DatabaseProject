@@ -118,15 +118,6 @@ TABLES['LapTimes'] = (
             REFERENCES DRIVERS (driverId) ON DELETE CASCADE)
         ''')  # USE SEC_TO_TIME
 
-CREATE DEFINER=`root`@`localhost` FUNCTION `ConvertTimeDelta`(duration int) RETURNS
-varchar(20) CHARSET utf8mb4
-    DETERMINISTIC
-BEGIN
- DECLARE time_delta VARCHAR(20);
- SET time_delta = TIME_FORMAT(SEC_TO_TIME(duration/1000), date_format);
- RETURN time_delta;
-END
-
 
 for table_name in TABLES:
     table_description = TABLES[table_name]
