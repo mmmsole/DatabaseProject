@@ -11,7 +11,7 @@ db_name = 'Formula1_database'
 mydb = mysql.connector.connect(
   host="localhost",
   user="root",
-  password="Tazzadargento_90",
+  password="ciaociao",
   database= db_name
 )
 
