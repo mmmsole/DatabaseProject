@@ -60,7 +60,7 @@ TABLES['Races'] = (
           raceName VARCHAR(80),
           raceDate DATE,
           raceTime TIME,
-          CONSTRAINT RACES__ibfk_4 FOREIGN KEY (circuitId)
+          CONSTRAINT RACES_ibfk_4 FOREIGN KEY (circuitId)
                 REFERENCES CIRCUITS (circuitId) ON DELETE CASCADE)
         ''')
 
@@ -114,7 +114,10 @@ TABLES['LapTimes'] = (
           position INT,
           time time,
           ms INT,
-          
+          CONSTRAINT LAPTIMES_ibfk_1 FOREIGN KEY (raceId)
+            REFERENCES RACES (raceId) ON DELETE CASCADE,
+          CONSTRAINT LAPTIMES_ibfk_2 FOREIGN KEY (driverId)
+            REFERENCES DRIVERS (driverId) ON DELETE CASCADE)
         ''')
 
 
