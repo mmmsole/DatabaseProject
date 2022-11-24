@@ -5,7 +5,7 @@ import mysql.connector
 import pandas as pd
 from mysql.connector import errorcode
 from Cleaning import *
-from connectionPythonMySql import *
+from createDB import *
 
 print(circuits.info())
 

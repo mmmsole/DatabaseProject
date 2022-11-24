@@ -2,11 +2,7 @@ import mysql.connector
 import pandas as pd
 from mysql.connector import errorcode
 
-db_name = 'Formula1_database'
-results = pd.read_csv('archive/results.csv')
-results = results.iloc[:, 0:13]
-
-results = results.drop( columns = 'positionText')
+db_name = 'F1_db'
 
 # we start by using the database
 mydb = mysql.connector.connect(
@@ -35,7 +31,7 @@ TABLES['Circuits'] = (
           circuitRef VARCHAR(40),
           name VARCHAR(80),
           location VARCHAR(100),
-          country VARCHAR(80)
+          country VARCHAR(80))
         ''')
 
 TABLES['Drivers'] = (
@@ -96,7 +92,7 @@ TABLES['Pitstop'] = (
           lapNumber INT,
           timePitStop TIME,
           duration FLOAT,
-          PRIMARY KEY (raceId, driverId, stopNumber)
+          PRIMARY KEY (raceId, driverId, stopNumber),
           CONSTRAINT PITSTOP_ibfk_1 FOREIGN KEY (raceId)
             REFERENCES RACES (raceId) ON DELETE CASCADE,
           CONSTRAINT PITSTOP_ibfk_2 FOREIGN KEY (driverId)
@@ -107,11 +103,12 @@ TABLES['Pitstop'] = (
 #Aggiungo tabella LapTimes
 TABLES['LapTimes'] = (
         '''CREATE TABLE LAPTIMES (
-          raceID INT PRIMARY KEY,
-          driverID INT PRIMARY KEY,
-          lap INT PRIMARY KEY,
+          raceID INT,
+          driverID INT,
+          lap INT,
           position INT,
           ms INT,
+          PRIMARY KEY (raceID, driverId, lap),
           CONSTRAINT LAPTIMES_ibfk_1 FOREIGN KEY (raceId)
             REFERENCES RACES (raceId) ON DELETE CASCADE,
           CONSTRAINT LAPTIMES_ibfk_2 FOREIGN KEY (driverId)
