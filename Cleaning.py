@@ -11,7 +11,7 @@ results_1 = pd.read_csv('archive/results.csv')
 races = races_1.loc[races_1["year"] > 2002]
 races = races.iloc[:,0:7]
 #to get some info about the table
-#print(races.info())
+print(races.info())
 #print(races_1.shape)
 #print(races.shape)
 
@@ -20,7 +20,7 @@ races = races.iloc[:,0:7]
 lap_times = lap_times_1[lap_times_1['raceId'].isin(races['raceId'])]
 lap_times = lap_times.iloc[:,0:6]
 #to get some info about the table
-print(lap_times.info())
+#print(lap_times.info())
 #print(lap_times_1.shape)
 #print(lap_times.shape)
 
