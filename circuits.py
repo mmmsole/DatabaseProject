@@ -4,8 +4,8 @@ import pandas as pd
 import mysql.connector
 import pandas as pd
 from mysql.connector import errorcode
+from Cleaning import *
 
-circuits = pd.read_csv('archive/circuits.csv')
 db_name = 'Formula1_database'
 
 mydb = mysql.connector.connect(
