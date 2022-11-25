@@ -84,6 +84,7 @@ except Exception as e:
     else:
         print(e)
 
+
 try:
     for i, row in pit_stops.iterrows():
         sql = f"INSERT INTO {db_name}.PITSTOP VALUES (%s,%s,%s,%s,%s,%s)"
@@ -100,11 +101,17 @@ except Exception as e:
     else:
         print(e)
 
-sql = f"INSERT INTO F1_db VALUES(%s,%s,%s,%s,%s)"
-
+'''sql = f"INSERT INTO F1_db.LAPTIMES VALUES(%s,%s,%s,%s,%s)"
+mycursor.execute(sql, tuple([841, 20, 1, 1, 98109]))
+mydb.commit()'''
 
 
 for i, row in lap_times.iterrows():
+    row['raceId'] = str(row['raceId'])
+    row['driverId'] = str(row['driverId'])
+    row['lap'] = str(row['lap'])
+    row['position'] = str(row['position'])
+    row['milliseconds'] = str(row['milliseconds'])
     sql = f"INSERT INTO {db_name}.LAPTIMES VALUES (%s,%s,%s,%s,%s)"
     for x in range(len(row)):
         if row[x] == r'\N':
@@ -113,6 +120,7 @@ for i, row in lap_times.iterrows():
                                  row['driverId'],
                                  row['lap'],
                                  row['position'],
-                                 row['milliseconds']]))
+                                 row['milliseconds']
+                                 ]))
     #print("Record inserted")
     mydb.commit()

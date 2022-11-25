@@ -16,10 +16,14 @@ races = races.iloc[:,0:7]
 #print(races_1.shape)
 #print(races.shape)
 
-
 # GET LAP TIMES WITH RACE ID
 lap_times = lap_times_1[lap_times_1['raceId'].isin(races['raceId'])]
 lap_times = lap_times.iloc[:,[0,1,2,3,5]]
+
+
+
+#lap_times_1.loc[[841,20,1,1], 'milliseconds'] =
+#lap_times_1.to_csv('lap_times.csv')
 
 '''for i, row in lap_times.iterrows():
     row['raceId'] = row['raceId'].astype(np.int32)
@@ -29,12 +33,9 @@ lap_times = lap_times.iloc[:,[0,1,2,3,5]]
     row['milliseconds'] = row['milliseconds'].astype(np.int32)
     #print(type(row['milliseconds']))'''
 
-'''for i, row in lap_times.iterrows():
-    row['raceId'] = int(row['raceId'])
-    row['driverId'] = int(row['driverId'])
-    row['lap'] = int(row['lap'])
-    row['position'] = int(row['position'])
-    row['milliseconds'] = int(row['milliseconds'])'''
+'''
+for i, row in lap_times.iterrows():
+    print(type(row['raceId']))'''
 
 '''for i in lap_times:
     pd.to_numeric(lap_times[i], downcast='integer')'''
@@ -42,6 +43,7 @@ lap_times = lap_times.iloc[:,[0,1,2,3,5]]
 '''for i in lap_times:
     for j in lap_times[i]:
         lap_times[i] = lap_times[i].replace(j,int(j))'''
+
 #to get some info about the table
 #print(lap_times.info())
 #print(lap_times_1.shape)
@@ -78,10 +80,6 @@ drivers = drivers.iloc[:,:-1]
 
 circuits = circuits_1.iloc[:, 0:5]
 #print(circuits.info())
-
-
-
-
 
 
 
