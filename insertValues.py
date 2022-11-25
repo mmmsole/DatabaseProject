@@ -86,8 +86,35 @@ except Exception as e:
 
 
 try:
+    for i, row in lap_times.iterrows():
+        row['raceId'] = str(row['raceId'])
+        row['driverId'] = str(row['driverId'])
+        row['lap'] = str(row['lap'])
+        row['position'] = str(row['position'])
+        row['milliseconds'] = str(row['milliseconds'])
+        sql = f"INSERT INTO {db_name}.LAPTIMES VALUES (%s,%s,%s,%s,%s)"
+        for x in range(len(row)):
+            if row[x] == r'\N':
+                row[x] = None
+        mycursor.execute(sql, tuple([row['raceId'],
+                                     row['driverId'],
+                                     row['lap'],
+                                     row['position'],
+                                     row['milliseconds']
+                                     ]))
+        #print("Record inserted")
+        mydb.commit()
+    print('Laptimes inserted')
+except Exception as e:
+    if str(e)[0:4] == '1062':
+        print('Laptimes already inserted')
+    else:
+        print(e)
+
+
+try:
     for i, row in pit_stops.iterrows():
-        sql = f"INSERT INTO {db_name}.PITSTOP VALUES (%s,%s,%s,%s,%s,%s)"
+        sql = f"INSERT INTO {db_name}.PITSTOPS VALUES (%s,%s,%s,%s,%s,%s)"
         for x in range(len(row)):
             if row[x] == r'\N':
                 row[x] = None
@@ -104,23 +131,3 @@ except Exception as e:
 '''sql = f"INSERT INTO F1_db.LAPTIMES VALUES(%s,%s,%s,%s,%s)"
 mycursor.execute(sql, tuple([841, 20, 1, 1, 98109]))
 mydb.commit()'''
-
-
-for i, row in lap_times.iterrows():
-    row['raceId'] = str(row['raceId'])
-    row['driverId'] = str(row['driverId'])
-    row['lap'] = str(row['lap'])
-    row['position'] = str(row['position'])
-    row['milliseconds'] = str(row['milliseconds'])
-    sql = f"INSERT INTO {db_name}.LAPTIMES VALUES (%s,%s,%s,%s,%s)"
-    for x in range(len(row)):
-        if row[x] == r'\N':
-            row[x] = None
-    mycursor.execute(sql, tuple([row['raceId'],
-                                 row['driverId'],
-                                 row['lap'],
-                                 row['position'],
-                                 row['milliseconds']
-                                 ]))
-    #print("Record inserted")
-    mydb.commit()

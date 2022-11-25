@@ -8,7 +8,7 @@ db_name = 'F1_db'
 mydb = mysql.connector.connect(
   host="localhost",
   user="root",
-  password="#MySQLDemi2022",
+  password="ciaociao",
   database= db_name
 )
 
@@ -100,8 +100,8 @@ TABLES['LapTimes'] = (
         ''')  # USE SEC_TO_TIME
 
 
-TABLES['Pitstop'] = (
-        '''CREATE TABLE PITSTOP (
+TABLES['Pitstops'] = (
+        '''CREATE TABLE PITSTOPS (
           raceId INT,
           driverId INT,
           stopNumber INT,
@@ -109,9 +109,9 @@ TABLES['Pitstop'] = (
           timePitStop TIME,
           duration FLOAT,
           PRIMARY KEY (raceId, driverId, stopNumber),
-          CONSTRAINT PITSTOP_ibfk_1 FOREIGN KEY (raceId)
+          CONSTRAINT PITSTOPS_ibfk_1 FOREIGN KEY (raceId)
             REFERENCES RACES (raceId) ON DELETE CASCADE,
-          CONSTRAINT PITSTOP_ibfk_2 FOREIGN KEY (driverId)
+          CONSTRAINT PITSTOPS_ibfk_2 FOREIGN KEY (driverId)
             REFERENCES DRIVERS (driverId) ON DELETE CASCADE)
         ''')
 

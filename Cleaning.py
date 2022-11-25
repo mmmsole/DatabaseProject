@@ -1,12 +1,14 @@
 import pandas as pd
-import numpy as np
 
-circuits_1 = pd.read_csv('archive/circuits.csv')
-drivers_1 = pd.read_csv('archive/drivers.csv')
-lap_times_1 = pd.read_csv('archive/lap_times.csv')
-pit_stops_1 = pd.read_csv('archive/pit_stops.csv')
-races_1 = pd.read_csv('archive/races.csv')
-results_1 = pd.read_csv('archive/results.csv')
+circuits_1 = pd.read_csv('archive/circuitsRaw.csv')
+drivers_1 = pd.read_csv('archive/driversRaw.csv')
+races_1 = pd.read_csv('archive/racesRaw.csv')
+results_1 = pd.read_csv('archive/resultsRaw.csv')
+lap_times_1 = pd.read_csv('archive/lap_timesRaw.csv')
+pit_stops_1 = pd.read_csv('archive/pit_stopsRaw.csv')
+
+circuits = circuits_1.iloc[:, 0:5]
+#print(circuits.info())
 
 # FROM RACES GET YEAR < 2002
 races = races_1.loc[races_1["year"] > 2002]
@@ -23,7 +25,7 @@ lap_times = lap_times.iloc[:,[0,1,2,3,5]]
 
 
 #lap_times_1.loc[[841,20,1,1], 'milliseconds'] =
-#lap_times_1.to_csv('lap_times.csv')
+#lap_times_1.to_csv('lap_timesRaw.csv')
 
 '''for i, row in lap_times.iterrows():
     row['raceId'] = row['raceId'].astype(np.int32)
@@ -78,8 +80,7 @@ drivers = drivers.iloc[:,:-1]
 #print(drivers_1.shape)
 #print(drivers.shape)
 
-circuits = circuits_1.iloc[:, 0:5]
-#print(circuits.info())
+
 
 
 
