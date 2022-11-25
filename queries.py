@@ -28,12 +28,15 @@ mycursor = mydb.cursor()
 global selectedYear
 selectedYear = '2021'
 
+# Number of pit stops for Max Verstappen in 2021
 mycursor.execute(f'''Select d.name as Name, d.surname as Surname, d.number as DriverNumber, r.raceYear as Year, count(*) as NumPitStops
     From PitStops as p, Drivers as d, Races as r
     Where p.driverId = d.driverId and p.raceId = r.raceId and r.raceYear = {selectedYear}
-    Group by d.name, d.surname, d.number, r.raceYear
-    Having d.name = 'Lewis'  and d.surname = 'Hamilton'
+    Group by d.name
+    Having d.name = 'Max'  and d.surname = 'Verstappen'
     ''')
+
+# Number of pit stops for Lewis Hamilton in 2021
 
 
 result = mycursor.fetchall()
