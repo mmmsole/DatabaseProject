@@ -2,10 +2,19 @@ import mysql.connector
 
 db_name = 'F1_db'
 
+identifier = input('Who are you?\nMa, De or Da?\n')
+print(identifier)
+if identifier == 'Ma':
+    pw = 'Tazzadargento_90'
+elif identifier == 'Da':
+    pw = 'ciaociao'
+elif identifier == 'De':
+    pw = '#MySQLDemi2022'
+
 mydb = mysql.connector.connect(
   host="localhost",
   user="root",
-  password="Tazzadargento_90",
+  password= pw,
   database= db_name
 )
 
