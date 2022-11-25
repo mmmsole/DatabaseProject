@@ -100,28 +100,19 @@ except Exception as e:
     else:
         print(e)
 
+sql = f"INSERT INTO F1_db VALUES(%s,%s,%s,%s,%s)"
+
+
+
 for i, row in lap_times.iterrows():
     sql = f"INSERT INTO {db_name}.LAPTIMES VALUES (%s,%s,%s,%s,%s)"
     for x in range(len(row)):
         if row[x] == r'\N':
             row[x] = None
-    mycursor.execute(sql, tuple([row['raceId'], row['driverId'], row['lap'], row['position'], row['milliseconds']]))
+    mycursor.execute(sql, tuple([row['raceId'],
+                                 row['driverId'],
+                                 row['lap'],
+                                 row['position'],
+                                 row['milliseconds']]))
     #print("Record inserted")
     mydb.commit()
-
-
-'''try:
-    for i, row in lap_times.iterrows():
-        sql = f"INSERT INTO {db_name}.LAPTIMES VALUES (%s,%s,%s,%s,%s)"
-        for x in range(len(row)):
-            if row[x] == r'\N':
-                row[x] = None
-        mycursor.execute(sql, tuple([row['raceId'], row['driverId'], row['lap'], row['position'], row['milliseconds']]))
-        #print("Record inserted")
-        mydb.commit()
-    print('Laptimes inserted')
-except Exception as e:
-    if str(e)[0:4] == '1062':
-        print('Laptimes already inserted')
-    else:
-        print(e)'''
