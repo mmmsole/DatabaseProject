@@ -13,7 +13,7 @@ db_name = 'F1_db'
 mydb = mysql.connector.connect(
   host="localhost",
   user="root",
-  password="ciaociao",
+  password="#MySQLDemi2022",
   database= db_name
 )
 
