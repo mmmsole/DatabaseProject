@@ -1,14 +1,22 @@
 import mysql.connector
-import pandas as pd
 from mysql.connector import errorcode
 
 db_name = 'F1_db'
+
+identifier = input('Who are you?\nMa, De or Da?\n')
+print(identifier)
+if identifier == 'Ma':
+    pw = 'Tazzadargento_90'
+elif identifier == 'Da':
+    pw = 'ciaociao'
+elif identifier == 'De':
+    pw = '#MySQLDemi2022'
 
 # we start by using the database
 mydb = mysql.connector.connect(
   host="localhost",
   user="root",
-  password="#MySQLDemi2022",
+  password=pw,
   database= db_name
 )
 

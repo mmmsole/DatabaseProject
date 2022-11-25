@@ -1,19 +1,23 @@
-# read the dataset from workspace
-
 import mysql.connector
 from mysql.connector import errorcode
 from Cleaning import *
-#from createDB import *
-#from createTables import *
 
 db_name = 'F1_db'
 
-#print(circuits.info())
+identifier = input('Who are you?\nMa, De or Da?\n')
+print(identifier)
+if identifier == 'Ma':
+    pw = 'Tazzadargento_90'
+elif identifier == 'Da':
+    pw = 'ciaociao'
+elif identifier == 'De':
+    pw = '#MySQLDemi2022'
 
+# we start by using the database
 mydb = mysql.connector.connect(
   host="localhost",
   user="root",
-  password="#MySQLDemi2022",
+  password=pw,
   database= db_name
 )
 
