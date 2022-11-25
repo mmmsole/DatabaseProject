@@ -7,10 +7,13 @@ two drivers. Let’s see some insights of such racing fight.
 1.	Total number of pitstops in 2021 season for Max Verstappen and Lewis Hamilton
 2.	Total number of fastest laps in 2021 season for Max Verstappen and Lewis Hamilton, and even the fastest one for each driver
 3.	Total number of pitstops per race for Max Verstappen and Lewis Hamilton in 2021 season
+4.  All drivers who did more pitstops than the 2021 World Champion (Max Verstappen)
+5.  All drivers who did more fastest laps than the 2021 World Champion (Max Verstappen)
 
-Further queries
+Further queries describing the last 20 years of Formula1 in general
 1.	List the total points scored by each driver having Italian nationality
 2.	List of all drivers who have never won a race
+3.  Average number of pitstops per race in the last 20 years
 
 Solution Max vs Lewis
 1)
@@ -57,7 +60,7 @@ Total number of pitstops per race for Max Verstappen in 2021 season:
     From PitStops as p, Races as r, Drivers as d
     Where p.raceID = r.raceID and p.driverID = d.driverID and r.raceYear = 2021
     Group by r.raceName
-    Having d.name = ‘Lewis’ and d.surname = ‘Hamilton’
+    Having d.name = ‘Max’ and d.surname = ‘Verstappen’
 
 Total number of pitstops per race for Lewis Hamilton in 2021 season:
 

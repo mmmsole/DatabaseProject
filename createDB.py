@@ -6,7 +6,7 @@ db_name = 'F1_db'
 try:
     mydb = mysql.connector.connect(host='localhost',
                                    user='root',
-                                   password='ciaociao',
+                                   password='#MySQLDemi2022',
                                    auth_plugin='mysql_native_password')  # you can add the auth_plugin here too (ref line 26)
     if mydb.is_connected():
         mycursor = mydb.cursor()
