@@ -2,6 +2,7 @@ import mysql.connector
 from mysql.connector import errorcode
 
 db_name = 'F1_db'
+
 try:
     mydb = mysql.connector.connect(host='localhost',
                                    user='root',

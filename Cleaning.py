@@ -18,7 +18,7 @@ races = races.iloc[:,0:7]
 
 # GET LAP TIMES WITH RACE ID
 lap_times = lap_times_1[lap_times_1['raceId'].isin(races['raceId'])]
-lap_times = lap_times.iloc[:,0:6]
+lap_times = lap_times.iloc[:,[0,1,2,3,5]]
 #to get some info about the table
 #print(lap_times.info())
 #print(lap_times_1.shape)
@@ -34,7 +34,7 @@ pit_stops = pit_stops.iloc[:,0:6]
 
 # GET RESULT WITH RACE ID
 results = results_1[results_1['raceId'].isin(races['raceId'])]
-results = results.iloc[:,[0,1,2,5,6,9]]
+results = results.iloc[:,[0,1,2,5,6,9,13]]
 #to get some info about the table
 #print(results.info())
 #print(results_1.shape)
@@ -43,6 +43,7 @@ results = results.iloc[:,[0,1,2,5,6,9]]
 # GET DRIVERS WITH LAP TIMES
 drivers = drivers_1[drivers_1['driverId'].isin(lap_times['driverId'])]
 drivers = drivers.iloc[:,:-1]
+#drivers = drivers.replace(r'\N','NULL')
 #to get some info about the table
 #print(drivers.info())
 #print(drivers_1.shape)
