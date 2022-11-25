@@ -84,6 +84,22 @@ TABLES['Results'] = (
         ''')
 
 
+#Aggiungo tabella LapTimes
+TABLES['LapTimes'] = (
+        '''CREATE TABLE LAPTIMES (
+          raceId INT,
+          driverId INT,
+          lap INT,
+          position INT,
+          ms INT,
+          PRIMARY KEY (raceId, driverId, lap),
+          CONSTRAINT LAPTIMES_ibfk_1 FOREIGN KEY (raceId)
+            REFERENCES RACES (raceId) ON DELETE CASCADE,
+          CONSTRAINT LAPTIMES_ibfk_2 FOREIGN KEY (driverId)
+            REFERENCES DRIVERS (driverId) ON DELETE CASCADE)
+        ''')  # USE SEC_TO_TIME
+
+
 TABLES['Pitstop'] = (
         '''CREATE TABLE PITSTOP (
           raceId INT,
@@ -98,23 +114,6 @@ TABLES['Pitstop'] = (
           CONSTRAINT PITSTOP_ibfk_2 FOREIGN KEY (driverId)
             REFERENCES DRIVERS (driverId) ON DELETE CASCADE)
         ''')
-
-
-#Aggiungo tabella LapTimes
-TABLES['LapTimes'] = (
-        '''CREATE TABLE LAPTIMES (
-          raceID INT,
-          driverID INT,
-          lap INT,
-          position INT,
-          ms INT,
-          PRIMARY KEY (raceID, driverId, lap),
-          CONSTRAINT LAPTIMES_ibfk_1 FOREIGN KEY (raceId)
-            REFERENCES RACES (raceId) ON DELETE CASCADE,
-          CONSTRAINT LAPTIMES_ibfk_2 FOREIGN KEY (driverId)
-            REFERENCES DRIVERS (driverId) ON DELETE CASCADE)
-        ''')  # USE SEC_TO_TIME
-
 
 for table_name in TABLES:
     table_description = TABLES[table_name]
