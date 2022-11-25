@@ -5,7 +5,7 @@ db_name = 'F1_db'
 mydb = mysql.connector.connect(
   host="localhost",
   user="root",
-  password="ciaociao",
+  password="Tazzadargento_90",
   database= db_name
 )
 
