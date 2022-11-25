@@ -1,27 +1,3 @@
-'''
-import pandas as pd
-
-# 1: selecting random rows of your dataset
-d = pd.DataFrame('ciao.csv')
-d1 = d.sample(n=100)
-
-# 2: selecting every k-th (in the example, k=10) row stopping at row 1000
-
-f = open('ciao.csv', "r")
-k = 10
-
-dataset = []
-i = 0
-stop = 10000
-for row in r.readlines():
-	if i%k == 0:
-		dataset += [row]
-	i += 1
-	if i >= stop:
-		break
-'''
-from queries import *
-# Write <dataset> to a new file 'reduced_dataset.csv'
 
 def load_data(dataset_fname: str):
 	print("I loaded the dataset and built the database!\n")
@@ -42,9 +18,6 @@ def query_members():
 
 def query_rentals():
 	print(f"<result of query_3>")
-
-
-
 
 
 # MAIN
