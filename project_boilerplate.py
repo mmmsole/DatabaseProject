@@ -50,7 +50,7 @@ def load_data(dataset_fname: str):
 	pass 
 
 
-def query_pitStopLewis():
+def PitStop_Ham_Verst():
 	# yearselected = int(input('select year: ')) ---> non necessario se anno è sempre 2021
 	mycursor.execute('''Select d.name as Name, d.surname as Surname, d.number as DriverNumber, r.raceYear as Year, count(*) as NumPitStops
 	    From PitStops as p, Drivers as d, Races as r
@@ -61,15 +61,38 @@ def query_pitStopLewis():
 	result1 = mycursor.fetchall()
 
 	mycursor.execute('''Select d.name as Name, d.surname as Surname, d.number as DriverNumber, r.raceYear as Year, count(*) as NumPitStops
-			    From PitStops as p, Drivers as d, Races as r
-			    Where p.driverId = d.driverId and p.raceId = r.raceId and r.raceYear = 2021
-			    Group by d.name, d.surname, d.number, r.raceYear
-			    Having d.name = 'Max'  and d.surname = 'Verstappen'
+		From PitStops as p, Drivers as d, Races as r
+		Where p.driverId = d.driverId and p.raceId = r.raceId and r.raceYear = 2021
+		Group by d.name, d.surname, d.number, r.raceYear
+		Having d.name = 'Max'  and d.surname = 'Verstappen'
+		''')
+	result2 = mycursor.fetchall()
+
+	for row1 in result1:
+		for row2 in result2:
+			print(f"\n====\n Result of your query: \n{row1}\n{row2}\n ====")
+
+def Fastest_lap_Ham_Verst():
+	# yearselected = int(input('select year: ')) ---> non necessario se anno è sempre 2021
+	mycursor.execute('''Select d.name as Name, d.surname as Surname, d.number as DriverNumber, r.raceYear as Year, count(*) as NumFastestLap, min(res.fastLap) as FastestLap
+		From Results as res, Races as r, Drivers as d
+		Where res.raceID = r.raceID and res.driverID = d.driverID and r.raceYear = 2021
+		Group by d.name
+	    Having d.name = 'Lewis'  and d.surname = 'Hamilton'
+	    ''')
+	result1 = mycursor.fetchall()
+
+	mycursor.execute('''Select d.name as Name, d.surname as Surname, d.number as DriverNumber, r.raceYear as Year, count(*) as NumFastestLap, min(res.fastLap) as FastestLap
+		From Results as res, Races as r, Drivers as d
+		Where res.raceID = r.raceID and res.driverID = d.driverID and r.raceYear = 2021
+		Group by d.name
+	    Having d.name = 'Max'  and d.surname = 'Verstappen'
 			    ''')
 	result2 = mycursor.fetchall()
 	for row1 in result1:
 		for row2 in result2:
-			print(f"\n====\n Result of your query: \n {row1}\n{row2}\n ====")
+			print(f"\n====\n Result of your query: \n{row1}\n{row2}\n ====")
+
 
 
 def query_members():
@@ -88,12 +111,13 @@ if __name__ == "__main__":
 	print("Welcome to our project!\n")
 	load_data("mydataset.txt")
 
-	valid_choices = ['query_pitStopLewis','query_members']
+	valid_choices = ['PitStop_Ham_Verst','Fastest_lap_Ham_Verst','query_members']
 
 	while True:
 
-		choice = input('''\n\nChoose a query to execute by typing 'query_pitStopLewis','query_members',\n
-'query_pitStopLewis' -> Total number of pitstops in 2021 season for Max Verstappen and Lewis Hamilton
+		choice = input('''\n\nChoose a query to execute by typing 'PitStop_Ham_Verst','Fastest_lap_Ham_Verst 'query_members',\n
+'PitStop_Ham_Verst' -> Total number of pitstops in 2021 season for Max Verstappen and Lewis Hamilton
+'Fastest_lap_Ham_Verst' -> Number of fastest laps and fastest lap for Max Verstappen and Lewis Hamilton
 'members' -> Get all the members
 'rentals' -> Get all the rentals
  > ''')
@@ -106,8 +130,10 @@ if __name__ == "__main__":
 			break
 
 		print(f"\nYou chose to execute query {choice}")
-		if choice == 'query_pitStopLewis':
-			query_pitStopLewis()
+		if choice == 'PitStop_Ham_Verst':
+			PitStop_Ham_Verst()
+		elif choice == 'Fastest_lap_Ham_Verst':
+			Fastest_lap_Ham_Verst()
 		elif choice == 'members':
 			query_members()
 		elif choice == 'rentals':
