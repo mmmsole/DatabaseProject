@@ -11,9 +11,10 @@ two drivers. Let’s see some insights of such racing fight.
 5.  All drivers who did more fastest laps than the 2021 World Champion (Max Verstappen)
 
 Further queries describing the last 20 years of Formula1 in general
-1.	List the total points scored by each driver having Italian nationality
-2.	List of all drivers who have never won a race
-3.  Average number of pitstops per race in the last 20 years
+1.  The World Champion for a given year
+2.	List the total points scored by each driver having Italian nationality
+3.	List of all drivers who have never won a race
+4.  Average number of pitstops per race in the last 20 years
 
 Solution Max vs Lewis
 1)
@@ -71,5 +72,13 @@ Total number of pitstops per race for Lewis Hamilton in 2021 season:
     Where p.raceID = r.raceID and p.driverID = d.driverID and r.raceYear = 2021
     Group by r.raceName
     Having d.name = ‘Lewis’ and d.surname = ‘Hamilton’
+
+4)
+
+All drivers who did more pitstops than the 2021 World Champion (Max Verstappen)
+
+
+
+
 
 Solution general queries

@@ -148,12 +148,12 @@ if __name__ == "__main__":
 'rentals' -> Get all the rentals
  > ''')
 
+		if choice == "quit":
+			break
+
 		if choice not in valid_choices:
 			print(f"Your choice '{choice}' is not valid. Please retry")
 			continue
-
-		if choice == "quit":
-			break
 
 		print(f"\nYou chose to execute query {choice}")
 		if choice == 'PitStop_Ham_Verst':
