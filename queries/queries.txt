@@ -5,37 +5,36 @@ Anyway, this epic battle was far from being unexpected. The whole season was hig
 two drivers. Let’s see some insights of such racing fight.
 
 1.	Total number of pitstops in 2021 season for Max Verstappen and Lewis Hamilton (Done)
-2.	Total number of fastest laps in 2021 season for Max Verstappen and Lewis Hamilton (Done)
-3.	Total number of pitstops per race for Max Verstappen and Lewis Hamilton in 2021 season (incomplete)
+2.	Total number of fastest laps in 2021 season for Max Verstappen and Lewis Hamilton (Done to be verified)
+3.	Total number of pitstops per race for Max Verstappen and Lewis Hamilton in 2021 season (Done)
 4.  All drivers who did less pitstops than the 2021 World Champion (Max Verstappen) (Done)
-5.  All drivers who did more fastest laps than the 2021 World Champion (Max Verstappen) (Done)
+5.  All drivers who did more fastest laps than the 2021 World Champion (Max Verstappen) (Done to be verified)
 
 Further queries describing the last 20 years of Formula1 in general
-1.  The World Champion for a given year
-2.	List the total points scored by each driver having Italian nationality
-3.	List of all drivers who have never won a race
-4.  Average number of pitstops per race in the last 20 years
+6.  The World Champion for a given year
+7.	List the total points scored by each driver having Italian nationality
+8.	List of all drivers who have never won a race
+9.  Average number of pitstops per race in the last 20 years
 
-Solution Max vs Lewis
+
 
 1)
-
 I consider the table PitStop, table Drivers for the name, and table Races for the year
 
 Number of pit stops for Max Verstappen in 2021:
 
-    Select d.name as Name, d.surname as Surname, d.number as DriverNumber, r.raceYear as Year, count(*) as NumPitStops
+    Select d.name as Name, d.surname as Surname, d.number as DriverNumber, r.raceYear as Year, count(p.stopNumber) as NumPitStops
 	From PitStops as p, Drivers as d, Races as r
 	Where p.driverId = d.driverId and p.raceId = r.raceId and r.raceYear = 2021
-	Group by d.name
+	Group by d.driverId
 	Having d.name = 'Max'  and d.surname = 'Verstappen' 
 
 Number of pit stops for Lewis Hamilton in 2021:
 
-    Select d.name as Name, d.surname as Surname, d.number as DriverNumber, r.raceYear as Year, count(*) as NumPitStops
+    Select d.name as Name, d.surname as Surname, d.number as DriverNumber, r.raceYear as Year, count(p.stopNumber) as NumPitStops
 	From PitStops as p, Drivers as d, Races as r
 	Where p.driverId = d.driverId and p.raceId = r.raceId and r.raceYear = 2021
-	Group by d.name
+	Group by d.driverId
 	Having d.name = 'Lewis'  and d.surname = 'Hamilton'
 
 2)
@@ -44,7 +43,7 @@ Number of fastest laps for Max Verstappen in 2021:
     Select d.name as Name, d.surname as Surname, d.number as DriverNumber, r.raceYear as Year, count(res.fastLap) as NumFastestLap
 	From Results as res, Races as r, Drivers as d
 	Where res.raceId = r.raceId and res.driverId = d.driverId and r.raceYear = 2021
-	Group by d.name
+	Group by d.driverId
 	Having d.name = 'Max'  and d.surname = 'Verstappen' 
 
 Number of fastest laps for Lewis Hamilton in 2021:
@@ -52,25 +51,25 @@ Number of fastest laps for Lewis Hamilton in 2021:
     Select d.name as Name, d.surname as Surname, d.number as DriverNumber, r.raceYear as Year, count(res.fastLap) as NumFastestLap
 	From Results as res, Races as r, Drivers as d
 	Where res.raceId = r.raceId and res.driverId = d.driverId and r.raceYear = 2021
-	Group by d.name
+	Group by d.driverId
 	Having d.name = 'Lewis'  and d.surname = 'Hamilton'
 
 3) 
 Total number of pitstops per race for Max Verstappen in 2021 season:
 
-    Select d.name as Name, d.surname as Surname, d.number as DriverNumber, r.year as Year, count(*) as NumPitStops
-    From PitStops as p, Races as r, Drivers as d
-    Where p.raceID = r.raceID and p.driverID = d.driverID and r.raceYear = 2021
-    Group by r.raceName
-    Having d.name = ‘Max’ and d.surname = ‘Verstappen’
+    Select d.name as Name, d.surname as Surname, d.number as DriverNumber, r.raceYear as Year, r.raceName as GrandPrix, c.name as CircuitName, count(*) as NumPitStops
+    From PitStops as p, Races as r, Drivers as d, Circuits as c
+    Where p.raceId = r.raceId and p.driverId = d.driverId and r.circuitId = c.circuitId and r.raceYear = 2021
+    Group by r.raceName, d.driverId
+    Having d.name = 'Max' and d.surname = 'Verstappen'
 
 Total number of pitstops per race for Lewis Hamilton in 2021 season:
 
-    Select d.name as Name, d.surname as Surname, d.number as DriverNumber, r.year as Year, count(*) as NumPitStops
-    From PitStops as p, Races as r, Drivers as d
-    Where p.raceID = r.raceID and p.driverID = d.driverID and r.raceYear = 2021
-    Group by r.raceName
-    Having d.name = ‘Lewis’ and d.surname = ‘Hamilton’
+    Select d.name as Name, d.surname as Surname, d.number as DriverNumber, r.raceYear as Year, r.raceName as GrandPrix, c.name as CircuitName, count(*) as NumPitStops
+    From PitStops as p, Races as r, Drivers as d, Circuits as c
+    Where p.raceId = r.raceId and p.driverId = d.driverId and r.circuitId = c.circuitId and r.raceYear = 2021
+    Group by r.raceName, d.driverId
+    Having d.name = 'Lewis' and d.surname = 'Hamilton'
 
 4)
 All drivers who did less pitstops than the 2021 World Champion (Max Verstappen)
@@ -108,6 +107,18 @@ Having count(res.fastLap) > (
     ) as x
 )
 
+6)
+The World Champion for a given year
+
+Select d.driverId, d.name, d.surname, d.number sum(res.points)
+From Drivers as d, Results as res, Races as r
+Where d.driverId = res.driverId and r.raceId = res.raceId and r.raceYear = 2021
+Group by d.driverId
+
+Select d.driverId, d.surname, sum(res.points)
+From Drivers as d, Results as res, Races as r
+Where d.driverId = res.driverId and r.raceId = res.raceId and r.raceYear = 2021
+Group by d.driverId
 
 
 
@@ -120,5 +131,3 @@ Having count(res.fastLap) > (
 
 
 
-
-Solution general queries
