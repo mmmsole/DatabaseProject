@@ -11,7 +11,7 @@ two drivers. Let’s see some insights of such racing fight.
 5.  All drivers who did more fastest laps than the 2021 World Champion (Max Verstappen) (Done to be verified)
 
 Further queries describing the last 20 years of Formula1 in general
-6.  The World Champion for a given year
+6.  Driver standings for a given season 
 7.	List the total points scored by each driver having Italian nationality
 8.	List of all drivers who have never won a race
 9.  Average number of pitstops per race in the last 20 years
@@ -108,20 +108,15 @@ Having count(res.fastLap) > (
 )
 
 6)
-The World Champion for a given year
+Drivers' standings for a given season
 
-Select d.driverId, d.name, d.surname, d.number sum(res.points)
+Select  d.name, d.surname, d.number, sum(res.points) as Standings
 From Drivers as d, Results as res, Races as r
 Where d.driverId = res.driverId and r.raceId = res.raceId and r.raceYear = 2021
-Group by d.driverId
+Group by d.name, d.surname
+Order by Standings DESC
 
-Select d.driverId, d.surname, sum(res.points)
-From Drivers as d, Results as res, Races as r
-Where d.driverId = res.driverId and r.raceId = res.raceId and r.raceYear = 2021
-Group by d.driverId
-
-
-
+7)
 
 
 
