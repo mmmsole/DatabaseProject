@@ -1,7 +1,7 @@
-
 import mysql.connector
 
 identifier = input('Who are you?\nMa, De or Da?\n')
+print(identifier)
 if identifier == 'Ma':
     pw = 'Tazzadargento_90'
 elif identifier == 'Da':

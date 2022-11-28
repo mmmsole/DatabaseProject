@@ -1,5 +1,4 @@
-import mysql.connector
-from mysql.connector import errorcode
+import mysql.connector, time
 from Cleaning import *
 
 db_name = 'F1_db'
@@ -88,24 +87,14 @@ except Exception as e:
     else:
         print(e)
 
-
+startime = time.time()
 try:
     for i, row in lap_times.iterrows():
-        row['raceId'] = str(row['raceId'])
-        row['driverId'] = str(row['driverId'])
-        row['lap'] = str(row['lap'])
-        row['position'] = str(row['position'])
-        row['milliseconds'] = str(row['milliseconds'])
         sql = f"INSERT INTO {db_name}.LAPTIMES VALUES (%s,%s,%s,%s,%s)"
         for x in range(len(row)):
             if row[x] == r'\N':
                 row[x] = None
-        mycursor.execute(sql, tuple([row['raceId'],
-                                     row['driverId'],
-                                     row['lap'],
-                                     row['position'],
-                                     row['milliseconds']
-                                     ]))
+        mycursor.execute(sql, tuple([str(row['raceId']), str(row['driverId']), str(row['lap']), str(row['position']), str(row['milliseconds'])]))
         #print("Record inserted")
         mydb.commit()
     print('Laptimes inserted')
@@ -114,7 +103,7 @@ except Exception as e:
         print('Laptimes already inserted')
     else:
         print(e)
-
+endtime = time.time()
 
 try:
     for i, row in pit_stops.iterrows():
@@ -135,3 +124,5 @@ except Exception as e:
 '''sql = f"INSERT INTO F1_db.LAPTIMES VALUES(%s,%s,%s,%s,%s)"
 mycursor.execute(sql, tuple([841, 20, 1, 1, 98109]))
 mydb.commit()'''
+
+print('inserting lap times took',str(endtime-startime))
