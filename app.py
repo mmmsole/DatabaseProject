@@ -62,7 +62,7 @@ def query2():
         d.number as DriverNumber, r.raceYear as Year, count(res.fastLap) as NumFastestLap
         From Results as res, Races as r, Drivers as d
         Where res.raceId = r.raceId and res.driverId = d.driverId and r.raceYear = 2021
-        Group by d.name
+        Group by d.name, d.surname, d.number, r.raceYear
         Having d.name = 'Lewis'  and d.surname = 'Hamilton'
         ''')
     result1 = mycursor.fetchall()
@@ -71,7 +71,7 @@ def query2():
         d.number as DriverNumber, r.raceYear as Year, count(res.fastLap) as NumFastestLap
         From Results as res, Races as r, Drivers as d
         Where res.raceId = r.raceId and res.driverId = d.driverId and r.raceYear = 2021
-        Group by d.name
+        Group by d.name, d.surname, d.number, r.raceYear
         Having d.name = 'Max'  and d.surname = 'Verstappen'
         ''')
     result2 = mycursor.fetchall()
