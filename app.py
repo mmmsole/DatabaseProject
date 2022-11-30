@@ -3,15 +3,15 @@ import mysql.connector
 pw = ""
 user = "Stranger"
 
-identifier = input('Who are you?\nMa, De or Da?\nIf you are someone else, enter.\n> ')
-print(identifier)
-if identifier == 'Ma':
+identifier = input('Who are you?\nMariasole (1), Davide (2) or Demetrio (3)?\nIf you are someone else, enter.\n> ')
+
+if identifier == '1':
     pw = 'Tazzadargento_90'
     user = 'Mariasole'
-elif identifier == 'Da':
+elif identifier == '2':
     pw = 'ciaociao'
     user = 'Davide'
-elif identifier == 'De':
+elif identifier == '3':
     pw = '#MySQLDemi2022'
     user = 'Demetrio'
 else:

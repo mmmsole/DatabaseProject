@@ -108,7 +108,7 @@ TABLES['LapTimes'] = (
         ''')  # USE SEC_TO_TIME
 
 
-TABLES['Pitstops'] = (
+TABLES['PitStops'] = (
         '''CREATE TABLE PITSTOPS (
           raceId INT,
           driverId INT,
