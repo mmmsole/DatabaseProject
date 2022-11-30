@@ -435,6 +435,7 @@ if __name__ == "__main__":
             load_data()
             print('\nDatabase successfully created, returning to menu.\
               \n________________________________________________________________')
+            continue
         if choice == 2:
             mycursor= mydb.cursor()
             print("\nStarting to create tables...\n")
@@ -450,6 +451,7 @@ if __name__ == "__main__":
             execute_query(mydb, PitStops)
             print('\nRequest executed successfully, returning to menu.\
               \n________________________________________________________________')
+            continue
         if choice == 3:
             print('\nStarting to insert data...')
             insert_circuits()
@@ -460,29 +462,30 @@ if __name__ == "__main__":
             insert_pit_stops()
             print('\nRequest executed successfully, returning to menu.\
               \n________________________________________________________________')
+            continue
         while True:
             if choice == 4:
-                valid_queries = ['query1', 'query2', 'query3', 'query4', 'query5', 'query6','back']
-                queries = input('''Choose a query to execute by typing one among the following:\n
-            'query1' -> Total number of pit stops in 2021 season for Max Verstappen and Lewis Hamilton
-            'query2' -> Number of fastest laps for Max Verstappen and Lewis Hamilton
-            'query3' -> Number of pit stops per race for Max Verstappen and Lewis Hamilton in 2021
-            'query4' -> All drivers who did fewer pit stops than the 2021 World Champion (Max Verstappen)
-            'query5' -> All drivers who ran more fastest laps than the 2021 World Champion (Max Verstappen)
-            'query6' -> Drivers' standings for a given season
+                valid_queries = [1,2,3,4,5,6]
+                queries = int(input('''Choose a query to execute by typing one among the following:\n
+            1 -> Total number of pit stops in 2021 season for Max Verstappen and Lewis Hamilton
+            2 -> Number of fastest laps for Max Verstappen and Lewis Hamilton
+            3 -> Number of pit stops per race for Max Verstappen and Lewis Hamilton in 2021
+            4 -> All drivers who did fewer pit stops than the 2021 World Champion (Max Verstappen)
+            5 -> All drivers who ran more fastest laps than the 2021 World Champion (Max Verstappen)
+            6 -> Drivers' standings for a given season
             Type 'back' to go back to menu.
-            > ''')
-                if queries == 'query1':
+            > '''))
+                if queries == 1:
                     query1()
-                if queries == 'query2':
+                if queries == 2:
                     query2()
-                if queries == 'query3':
+                if queries == 3:
                     query3()
-                if queries == 'query4':
+                if queries == 4:
                     query4()
-                if queries == 'query5':
+                if queries == 5:
                     query5()
-                if queries == 'back':
+                if queries == 6:
                     print('\nReturning to main menu.\
                       \n________________________________________________________________')
                     break
@@ -490,7 +493,8 @@ if __name__ == "__main__":
                     print('\nUnable to answer request: invalid input was given.\
                   \nReturning to query menu.\
                     \n________________________________________________________________')
-        if choice == 00:
+                    break
+        if choice == 5:
             print('\nApplication closed correctly\
           \n________________________________________________________________')
             break
