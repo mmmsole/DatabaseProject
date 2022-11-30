@@ -11,14 +11,20 @@ two drivers. Let’s see some insights of such racing fight.
 Further queries describing the last 20 years of Formula1 in general
 4.  Given a year, return a list containing the driver who achieved the fastest lap on each circuit
 5.  Driver standings for a given season (Done)
-6.	List the total points scored by each driver having Italian nationality
-7.	List of all drivers who have never won a race
-8.  Average number of pitstops per race in the last 20 years
+6.	Ranking according to total points of driver with a given nationality (Done)
+7.	List of all drivers who have never won a race (Done)
+8.  List of all drivers who have never scored points in their career in f1 (Done)
+9.  Average number of pitstops per race in the last 20 years
+10. In a f1 race not all the drivers score points, in fact the point-zone
+includes only the first ten positions. In general, one could classify as "epic comeback" the race of a driver
+who started not in point-zone, and ended the race as a winner. Hence, once 
+selected a year and a race, find the drivers who did an "epic comeback" in that race. 
+(In this case the user should be provided a list with all the races for the given year before)
 
 
 
 1)
-I consider the table PitStop, table Drivers for the name, and table Races for the year
+Total number of pitstops in 2021 season for Max Verstappen and Lewis Hamilton
 
 Number of pit stops for Max Verstappen in 2021:
 
@@ -38,6 +44,8 @@ Number of pit stops for Lewis Hamilton in 2021:
 
 
 2) 
+Total number of pitstops per race for Max Verstappen and Lewis Hamilton in 2021 season
+
 Total number of pitstops per race for Max Verstappen in 2021 season:
 
     Select d.name as Name, d.surname as Surname, d.number as DriverNumber, r.raceYear as Year, r.raceName as GrandPrix, c.name as CircuitName, count(*) as NumPitStops
@@ -54,57 +62,87 @@ Total number of pitstops per race for Lewis Hamilton in 2021 season:
     Group by r.raceName, d.driverId
     Having d.name = 'Lewis' and d.surname = 'Hamilton'
 
+
 3)
 All drivers who did less pitstops than the 2021 World Champion (Max Verstappen)
 
-Select d.name as Name, d.surname as Surname, d.number as DriverNumber, r.raceYear as Year, count(*) as NumPitStops
-From PitStops as p, Drivers as d, Races as r
-Where p.driverId = d.driverId and p.raceId = r.raceId and r.raceYear = 2021
-Group by d.name
-Having count(*) < (
-    Select x.NumPitStops
-    From (
-        Select d.name as Name, d.surname as Surname, d.number as DriverNumber, r.raceYear as Year, count(*) as NumPitStops
-	    From PitStops as p, Drivers as d, Races as r
-	    Where p.driverId = d.driverId and p.raceId = r.raceId and r.raceYear = 2021
-	    Group by d.name
-	    Having d.name = 'Max'  and d.surname = 'Verstappen'
-    ) as x
-)
+    Select d.name as Name, d.surname as Surname, d.number as DriverNumber, r.raceYear as Year, count(*) as NumPitStops
+    From PitStops as p, Drivers as d, Races as r
+    Where p.driverId = d.driverId and p.raceId = r.raceId and r.raceYear = 2021
+    Group by d.name
+    Having count(*) < (
+        Select x.NumPitStops
+        From (
+            Select d.name as Name, d.surname as Surname, d.number as DriverNumber, r.raceYear as Year, count(*) as NumPitStops
+            From PitStops as p, Drivers as d, Races as r
+            Where p.driverId = d.driverId and p.raceId = r.raceId and r.raceYear = 2021
+            Group by d.name
+            Having d.name = 'Max'  and d.surname = 'Verstappen'
+        ) as x
+    )
+
 
 4)
 Given a year, return a list containing the driver who achieved the fastest lap on each circuit
 
-Select
-From Races as r, Drivers as d, Circuits as c, LapTimes as l
-Where r.raceId = l.raceId and d.driverId = l.driver.id and r.circuitId = c.circuitId and r.raceYear = 2021
-Group by r.raceName
-Having l.ms = (
-	Select
-)
-
-
-
-
-
+    Select r.racename as GrandPrix, d.name as DriverName, d.surname as DriverSurname, l.ms as Time
+    From Races as r, Drivers as d, Circuits as c, LapTimes as l
+    Where r.raceId = l.raceId and d.driverId = l.driverId and r.circuitId = c.circuitId and r.raceYear = 2020
+    Group by r.raceName
+    Having l.ms = (
+        Select x.MinTime
+        From (
+            Select r.raceName, MIN(l.ms) as MinTime
+            From Races as r, Drivers as d, Circuits as c, LapTimes as l
+            Where r.raceId = l.raceId and d.driverId = l.driverId and r.circuitId = c.circuitId and r.raceYear = 2020
+            Group by r.raceName
+        ) as x
+    )
 
 
 5)
 Drivers' standings for a given season
 
-Select  d.name, d.surname, d.number, sum(res.points) as Standings
-From Drivers as d, Results as res, Races as r
-Where d.driverId = res.driverId and r.raceId = res.raceId and r.raceYear = 2021
-Group by d.name, d.surname
-Order by Standings DESC
+    Select  d.name, d.surname, d.number, sum(res.points) as Standings
+    From Drivers as d, Results as res, Races as r
+    Where d.driverId = res.driverId and r.raceId = res.raceId and r.raceYear = 2021
+    Group by d.name, d.surname
+    Order by Standings DESC
+
 
 6)
+Ranking according to total points of driver with a given nationality
+
+    Select d.driverId as DriverId, d.name as DriverName, d.surname as DriverSurname, SUM(r.points) as TotalPoints
+    From Drivers as d, Results as r
+    Where d.driverId = r.driverId and d.nationality = 'Italian'
+    Group by d.driverId
+    Order by TotalPoints DESC
 
 
+7)
+List of all drivers who have never won a race
+
+    Select name as Name, surname as surname
+    From Drivers
+    Where driverId NOT IN (
+        Select distinct driverId
+        From Results
+        Where finalPos = 1
+    )
 
 
+8)
+List of all drivers who have never scored points in their career in f1
 
-
+    Select name, surname
+    From Drivers
+    Where driverId IN (
+        Select driverId
+        From Results
+        Group by driverId
+        Having SUM(points) = 0
+    )
 
 
 
