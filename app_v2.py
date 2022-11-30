@@ -27,13 +27,20 @@ mydb = mysql.connector.connect(
 
 
 def load_data():
-  try:
-    if mydb.is_connected:
-      print("Connection to MySQL Database was successful")
-      mycursor = mydb.cursor()
-      mycursor.execute("CREATE DATABASE IF NOT EXISTS F1_db")
-      print("Database was created")
-  except Error as e:
+    try:
+        if mydb.is_connected():
+            mycursor = mydb.cursor()
+            mycursor.execute('SHOW DATABASES')
+            result = mycursor.fetchall()
+            for x in result:
+                if db_name == x[0]:
+                    mycursor.execute('DROP DATABASE ' + db_name)  # delete old database
+                    mydb.commit()  # make the changes official
+                    print("The database already exists! The old database has been deleted!")
+
+            mycursor.execute("CREATE DATABASE " + db_name)
+            mycursor.execute("USE " + db_name)
+    except errorcode as e:
         print("Error while connecting to MySQL", e)
 
 
@@ -109,6 +116,7 @@ LapTimes = (
           driverId INT,
           lap INT,
           position INT,
+          lapTime VARCHAR(15),
           ms INT,
           PRIMARY KEY (raceId, driverId, lap),
           CONSTRAINT LAPTIMES_ibfk_1 FOREIGN KEY (raceId)
@@ -148,7 +156,7 @@ races = races.iloc[:,0:7]
 
 # GET LAP TIMES OF OUR RACES
 lap_times = lap_times_1[lap_times_1['raceId'].isin(races['raceId'])]
-lap_times = lap_times.iloc[:,[0,1,2,3,5]]
+lap_times = lap_times.iloc[:,0:6]
 
 # GET PIT STOPS IN OUR LAP TIMES
 pit_stops = pit_stops_1[pit_stops_1['raceId'].isin(lap_times['raceId'])]
@@ -248,13 +256,13 @@ def insert_lap_times():
     mycursor = mydb.cursor()
     try:
         for i, row in lap_times.iterrows():
-            sql = f"INSERT INTO {db_name}.LAPTIMES VALUES (%s,%s,%s,%s,%s)"
+            sql = f"INSERT INTO {db_name}.LAPTIMES VALUES (%s,%s,%s,%s,%s,%s)"
             for x in range(len(row)):
                 if row[x] == r'\N':
                     row[x] = None
             mycursor.execute(sql, tuple(
-                [str(row['raceId']), str(row['driverId']), str(row['lap']), str(row['position']),
-                 str(row['milliseconds'])]))
+                [str(row['raceId']), str(row['driverId']), str(row['lap']),
+                 str(row['position']), str(row['time']), str(row['milliseconds'])]))
             # print("Record inserted")
             mydb.commit()
         print('Laptimes inserted')
@@ -433,7 +441,7 @@ if __name__ == "__main__":
         if choice == 1:
             print("\nCreating database...")
             load_data()
-            print('\nDatabase successfully created, returning to menu.\
+            print('\nDatabase successfully created and used, returning to menu.\
               \n________________________________________________________________')
             continue
         if choice == 2:

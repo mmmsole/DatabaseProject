@@ -21,7 +21,7 @@ races = races.iloc[:,0:7]
 
 # GET LAP TIMES OF OUR RACES
 lap_times = lap_times_1[lap_times_1['raceId'].isin(races['raceId'])]
-lap_times = lap_times.iloc[:,[0,1,2,3,5]]
+lap_times = lap_times.iloc[:,[0,1,2,3,4,5]]
 #to get some info about the table
 #print(lap_times.info())
 #print(lap_times_1.shape)
