@@ -14,13 +14,12 @@ Further queries describing the last 20 years of Formula1 in general
 6.	Ranking according to total points of driver with a given nationality (Done)
 7.	List of all drivers who have never won a race (Done)
 8.  List of all drivers who have never scored points in their career in f1 (Done)
-9.  Average number of pitstops per race in the last 20 years
+9.  Average number of pitstops per race in a given year
 10. List all the winners of each race for a given year (Done)
 11. In a f1 race not all the drivers score points, in fact the point-zone
 includes only the first ten positions. In general, one could classify as "epic comeback" the race of a driver
-who started not in point-zone, and ended the race as a winner. Hence, once 
-selected a year and a race, find the drivers who did an "epic comeback" in that race. 
-(In this case the user should be provided a list with all the races for the given year before)
+who started not in point-zone, and ended the race on podium. Hence, once 
+selected a year, find the drivers who did an "epic comeback" in that season.  (Done)
 
 
 
@@ -158,7 +157,17 @@ Average number of pitstops per race in a given year
 10)
 List all the winners of each race for a given year
 
-    Select r.raceId as RaceId, r.raceName as GrandPrix, r.raceYear as RaceYear, d.name as WinnerName, d.surname as WinnerSurname
+    Select r.raceName as GrandPrix, r.raceYear as RaceYear, r.raceDate as RaceDate, d.name as WinnerName, d.surname as WinnerSurname
     From Drivers as d, Results as res, Races as r
     Where d.driverId = res.driverId and res.raceId = r.raceId and r.raceYear = 2021 and res.finalPos = 1
-    Group by r.raceId
+
+
+11)
+In a f1 race not all the drivers score points, in fact the point-zone includes only the first ten positions. 
+In general, one could classify as "epic comeback" the race of a driver who started not in point-zone,
+and ended the race on podium. Hence, once selected a year, find the drivers who did an "epic comeback" in that season. 
+
+    Select r.raceName as GrandPrix, r.raceDate as RaceDate, d.name as DriverName, d.surname as DriverSurname, res.gridPos as GridPosition, res.finalPos as FinalPosition
+    From Drivers as d, Results as res, Races as r
+    Where d.driverId = res.driverId and r.raceId = res.raceId and r.raceYear = 2021 and res.gridPos > 10 and (res.finalPos >= 1 and res.finalPos <= 3)
+
