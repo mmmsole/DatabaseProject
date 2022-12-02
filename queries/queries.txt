@@ -15,7 +15,8 @@ Further queries describing the last 20 years of Formula1 in general
 7.	List of all drivers who have never won a race (Done)
 8.  List of all drivers who have never scored points in their career in f1 (Done)
 9.  Average number of pitstops per race in the last 20 years
-10. In a f1 race not all the drivers score points, in fact the point-zone
+10. List all the winners of each race for a given year (Done)
+11. In a f1 race not all the drivers score points, in fact the point-zone
 includes only the first ten positions. In general, one could classify as "epic comeback" the race of a driver
 who started not in point-zone, and ended the race as a winner. Hence, once 
 selected a year and a race, find the drivers who did an "epic comeback" in that race. 
@@ -145,4 +146,19 @@ List of all drivers who have never scored points in their career in f1
     )
 
 
+9)
+Average number of pitstops per race in a given year
 
+    Select r.raceId, r.raceName, r.raceYear, AVG(p.stopNumber) as AvgPitStops
+    From Races as r, PitStops as p
+    where p.raceId = r.raceId and r.raceYear = 2020
+    Group by r.raceId
+
+
+10)
+List all the winners of each race for a given year
+
+    Select r.raceId as RaceId, r.raceName as GrandPrix, r.raceYear as RaceYear, d.name as WinnerName, d.surname as WinnerSurname
+    From Drivers as d, Results as res, Races as r
+    Where d.driverId = res.driverId and res.raceId = r.raceId and r.raceYear = 2021 and res.finalPos = 1
+    Group by r.raceId
