@@ -38,7 +38,7 @@ def load_data():
                     mydb.commit()  # make the changes official
                     print("The database already exists! The old database has been deleted!")
 
-            mycursor.execute("CREATE DATABASE " + db_name)
+            mycursor.execute("CREATE DATABASE IF NOT EXISTS" + db_name)
             mycursor.execute("USE " + db_name)
     except errorcode as e:
         print("Error while connecting to MySQL", e)
