@@ -2,7 +2,7 @@ import mysql.connector
 from mysql.connector import Error, errorcode
 import pandas as pd
 
-db_name = 'F1_db'
+db_name = 'f1_db'
 identifier = input('Who are you?\nMariasole (1), Davide (2) or Demetrio (3)?\nIf you are someone else, enter.\n> ')
 
 if identifier == '1':
