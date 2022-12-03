@@ -1,6 +1,7 @@
 import mysql.connector
 from mysql.connector import Error, errorcode
 import pandas as pd
+from tabulate import tabulate as tb
 
 db_name = 'f1_db'
 identifier = input('Who are you?\nMariasole (1), Davide (2) or Demetrio (3)?\nIf you are someone else, enter.\n> ')
@@ -22,7 +23,6 @@ mydb = mysql.connector.connect(host='localhost',
                                    user='root',
                                    password=pw,
                                    auth_plugin='mysql_native_password')
-
 
 def load_data():
     try:
@@ -301,7 +301,11 @@ def query1():
         Group by d.driverId
         Having d.name = 'Max'  and d.surname = 'Verstappen'
         ''')
+    print(f"\n====\nResult of your query: \n")
     result1 = mycursor.fetchall()
+    table = tb(result1, headers=['HOLDER NAME', 'COMPANY NAME', 'CITY', 'STATE', 'QUALIFICATION'], tablefmt='psql')
+    print(table)
+    print(" Total number of selected rows: ", mycursor.rowcount)
 
     mycursor.execute('''Select d.name as Name, d.surname as Surname, d.number as DriverNumber, r.raceYear as Year, count(p.stopNumber) as NumPitStops
         From PitStops as p, Drivers as d, Races as r
@@ -310,8 +314,11 @@ def query1():
         Having d.name = 'Lewis'  and d.surname = 'Hamilton'
         ''')
     result2 = mycursor.fetchall()
+    table = tb(result2, headers=['HOLDER NAME', 'COMPANY NAME', 'CITY', 'STATE', 'QUALIFICATION'], tablefmt='psql')
+    print(table)
+    print(" Total number of selected rows: ", mycursor.rowcount)
 
-    print(f"\n====\nResult of your query: \n{result1}\n{result2}\n====\n")
+    print("====\n")
 
 
 def query2():
@@ -499,7 +506,13 @@ if __name__ == "__main__":
             continue
         while True:
             if choice == 4:
-                valid_queries = [1,2,3,4,5,6,7,8,9]
+                try:
+                    if mydb.is_connected():
+                        mycursor = mydb.cursor()
+                        mycursor.execute("USE " + db_name)
+                except errorcode as e:
+                    print("Error while connecting to MySQL", e)
+                valid_queries = [0,1,2,3,4,5,6,7,8,9]
                 queries = int(input('''Choose a query to execute by typing one among the following:\n
             1 -> Total number of pitstops in 2021 season for Max Verstappen and Lewis Hamilton
             2 -> Total number of pitstops per race for Max Verstappen and Lewis Hamilton in 2021 season
@@ -510,7 +523,7 @@ if __name__ == "__main__":
             7 -> List of all drivers who have never won a race
             8 -> List of all drivers who have never scored points in their career in f1
             9 -> Average number of pitstops per race in a given year
-            Type 'back' to go back to menu.
+            Type 0 to go back to menu.
             > '''))
                 if queries == 1:
                     query1()
@@ -530,7 +543,7 @@ if __name__ == "__main__":
                     query8()
                 if queries == 9:
                     query9()
-
+                if queries == 0:
                     print('\nReturning to main menu.\
                       \n________________________________________________________________')
                     break
