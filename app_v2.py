@@ -381,22 +381,12 @@ def query4():
 
 def query5():
     mycursor = mydb.cursor()
-    mycursor.execute('''Select d.name as Name, d.surname as Surname, 
-            d.number as DriverNumber, r.raceYear as Year, count(res.fastLap) as NumFastestLap
-            From Results as res, Races as r, Drivers as d
-            Where res.raceId = r.raceId and res.driverId = d.driverId and r.raceYear = 2021
-            Group by d.name
-            Having count(res.fastLap) > (
-                Select x.NumFastestLap
-                From (
-                    Select d.name as Name, d.surname as Surname, 
-                    d.number as DriverNumber, r.raceYear as Year, count(res.fastLap) as NumFastestLap
-                    From Results as res, Races as r, Drivers as d
-                    Where res.raceId = r.raceId and res.driverId = d.driverId and r.raceYear = 2021
-                    Group by d.name
-                    Having d.name = 'Max'  and d.surname = 'Verstappen'
-                ) as x
-                    )''')
+    mycursor.execute('''Select  d.name, d.surname, d.number, sum(res.points) as Standings
+        From Drivers as d, Results as res, Races as r
+        Where d.driverId = res.driverId and r.raceId = res.raceId and r.raceYear = 2021
+        Group by d.name, d.surname
+        Order by Standings DESC
+        ''')
 
     result = mycursor.fetchall()
 
@@ -405,11 +395,11 @@ def query5():
 
 def query6():
     mycursor = mydb.cursor()
-    mycursor.execute('''Select  d.name, d.surname, d.number, sum(res.points) as Standings
-        From Drivers as d, Results as res, Races as r
-        Where d.driverId = res.driverId and r.raceId = res.raceId and r.raceYear = 2021
-        Group by d.name, d.surname
-        Order by Standings DESC
+    mycursor.execute('''Select d.driverId as DriverId, d.name as DriverName, d.surname as DriverSurname, SUM(r.points) as TotalPoints
+        From Drivers as d, Results as r
+        Where d.driverId = r.driverId and d.nationality = 'Italian'
+        Group by d.driverId
+        Order by TotalPoints DESC
         ''')
 
     result = mycursor.fetchall()
@@ -515,8 +505,8 @@ if __name__ == "__main__":
             2 -> Total number of pitstops per race for Max Verstappen and Lewis Hamilton in 2021 season
             3 -> All drivers who did less pitstops than the 2021 World Champion (Max Verstappen)
             4 -> Given a year, return a list containing the driver who achieved the fastest lap on each circuit
-            5 -> All drivers who ran more fastest laps than the 2021 World Champion (Max Verstappen)
-            6 -> Drivers' standings for a given season
+            5 -> Drivers' standings for a given season
+            6 -> Ranking according to total points of driver with a given nationality
             7 -> List of all drivers who have never won a race
             8 -> List of all drivers who have never scored points in their career in f1
             9 -> Average number of pitstops per race in a given year
