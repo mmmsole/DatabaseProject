@@ -297,21 +297,19 @@ def insert_pit_stops():
 
 def query1():
     mycursor = mydb.cursor()
-    mycursor.execute('''Select d.name as Name, d.surname as Surname, 
-        d.number as DriverNumber, r.raceYear as Year, count(*) as NumPitStops
+    mycursor.execute('''Select d.name as Name, d.surname as Surname, d.number as DriverNumber, r.raceYear as Year, count(p.stopNumber) as NumPitStops
         From PitStops as p, Drivers as d, Races as r
         Where p.driverId = d.driverId and p.raceId = r.raceId and r.raceYear = 2021
-        Group by d.name, d.surname, d.number, r.raceYear
-        Having d.name = 'Lewis'  and d.surname = 'Hamilton'
+        Group by d.driverId
+        Having d.name = 'Max'  and d.surname = 'Verstappen'
         ''')
     result1 = mycursor.fetchall()
 
-    mycursor.execute('''Select d.name as Name, d.surname as Surname, 
-        d.number as DriverNumber, r.raceYear as Year, count(*) as NumPitStops
+    mycursor.execute('''Select d.name as Name, d.surname as Surname, d.number as DriverNumber, r.raceYear as Year, count(p.stopNumber) as NumPitStops
         From PitStops as p, Drivers as d, Races as r
         Where p.driverId = d.driverId and p.raceId = r.raceId and r.raceYear = 2021
-        Group by d.name, d.surname, d.number, r.raceYear
-        Having d.name = 'Max'  and d.surname = 'Verstappen'
+        Group by d.driverId
+        Having d.name = 'Lewis'  and d.surname = 'Hamilton'
         ''')
     result2 = mycursor.fetchall()
 
@@ -320,21 +318,19 @@ def query1():
 
 def query2():
     mycursor = mydb.cursor()
-    mycursor.execute('''Select d.name as Name, d.surname as Surname, 
-        d.number as DriverNumber, r.raceYear as Year, count(res.fastLap) as NumFastestLap
-        From Results as res, Races as r, Drivers as d
-        Where res.raceId = r.raceId and res.driverId = d.driverId and r.raceYear = 2021
-        Group by d.name, d.surname, d.number, r.raceYear
-        Having d.name = 'Lewis'  and d.surname = 'Hamilton'
+    mycursor.execute('''Select d.name as Name, d.surname as Surname, d.number as DriverNumber, r.raceYear as Year, r.raceName as GrandPrix, c.name as CircuitName, count(*) as NumPitStops
+        From PitStops as p, Races as r, Drivers as d, Circuits as c
+        Where p.raceId = r.raceId and p.driverId = d.driverId and r.circuitId = c.circuitId and r.raceYear = 2021
+        Group by r.raceName, d.driverId
+        Having d.name = 'Max' and d.surname = 'Verstappen'
         ''')
     result1 = mycursor.fetchall()
 
-    mycursor.execute('''Select d.name as Name, d.surname as Surname, 
-        d.number as DriverNumber, r.raceYear as Year, count(res.fastLap) as NumFastestLap
-        From Results as res, Races as r, Drivers as d
-        Where res.raceId = r.raceId and res.driverId = d.driverId and r.raceYear = 2021
-        Group by d.name, d.surname, d.number, r.raceYear
-        Having d.name = 'Max'  and d.surname = 'Verstappen'
+    mycursor.execute('''Select d.name as Name, d.surname as Surname, d.number as DriverNumber, r.raceYear as Year, r.raceName as GrandPrix, c.name as CircuitName, count(*) as NumPitStops
+        From PitStops as p, Races as r, Drivers as d, Circuits as c
+        Where p.raceId = r.raceId and p.driverId = d.driverId and r.circuitId = c.circuitId and r.raceYear = 2021
+        Group by r.raceName, d.driverId
+        Having d.name = 'Lewis' and d.surname = 'Hamilton'
         ''')
     result2 = mycursor.fetchall()
 
@@ -343,45 +339,42 @@ def query2():
 
 def query3():
     mycursor = mydb.cursor()
-    mycursor.execute('''Select d.name as Name, d.surname as Surname, 
-        d.number as DriverNumber, r.raceYear as Year, r.raceName as GrandPrix, count(p.stopNumber) as NumPitStops
-        From PitStops as p, Races as r, Drivers as d
-        Where p.raceId = r.raceId and p.driverId = d.driverId and r.raceYear = 2021
-        Group by r.raceName
-        Having d.name = 'Max' and d.surname = 'Verstappen'
-        ''')
-    result1 = mycursor.fetchall()
-
-    mycursor.execute('''Select d.name as Name, d.surname as Surname, 
-        d.number as DriverNumber, r.raceYear as Year, r.raceName as GrandPrix, count(p.stopNumber) as NumPitStops
-        From PitStops as p, Races as r, Drivers as d
-        Where p.raceId = r.raceId and p.driverId = d.driverId and r.raceYear = 2021
-        Group by r.raceName
-        Having d.name = 'Lewis' and d.surname = 'Hamilton'
-        ''')
-    result2 = mycursor.fetchall()
-
-    print(f"\n====\nResult of your query: \n{result1}\n{result2}\n====\n")
-
-
-def query4():
-    mycursor = mydb.cursor()
-    mycursor.execute('''Select d.name as Name, d.surname as Surname, 
-        d.number as DriverNumber, r.raceYear as Year, count(*) as NumPitStops
+    mycursor.execute('''Select d.driverId as DriverId, d.name as Name, d.surname as Surname, d.number as DriverNumber, r.raceYear as Year, count(p.stopNumber) as NumPitStops
         From PitStops as p, Drivers as d, Races as r
         Where p.driverId = d.driverId and p.raceId = r.raceId and r.raceYear = 2021
-        Group by d.name
-        Having count(*) < (
+        Group by d.driverId
+        Having count(p.stopNumber) < (
             Select x.NumPitStops
             From (
-                Select d.name as Name, d.surname as Surname, 
-                d.number as DriverNumber, r.raceYear as Year, count(*) as NumPitStops
+                Select d.name as Name, d.surname as Surname, d.number as DriverNumber, r.raceYear as Year, count(*) as NumPitStops
                 From PitStops as p, Drivers as d, Races as r
                 Where p.driverId = d.driverId and p.raceId = r.raceId and r.raceYear = 2021
                 Group by d.name
                 Having d.name = 'Max'  and d.surname = 'Verstappen'
             ) as x
-                )''')
+        )
+        ''')
+    result = mycursor.fetchall()
+
+    print(f"\n====\nResult of your query: \n{result}\n====\n")
+
+
+def query4():
+    mycursor = mydb.cursor()
+    mycursor.execute('''Select r.racename as GrandPrix, d.name as DriverName, d.surname as DriverSurname, l.ms as ms, sec_to_time(ms/1000) as LapTime
+        From Races as r, Drivers as d, Circuits as c, LapTimes as l
+        Where r.raceId = l.raceId and d.driverId = l.driverId and r.circuitId = c.circuitId and r.raceYear = 2021
+        Group by r.raceName, d.name, d.surname, l.ms, r.raceYear
+        Having l.ms in (
+            Select x.MinTime
+            From (
+                Select r.raceName, MIN(l.ms) as MinTime
+                From Races as r, Drivers as d, Circuits as c, LapTimes as l
+                Where r.raceId = l.raceId and d.driverId = l.driverId and r.circuitId = c.circuitId and r.raceYear = 2021
+                Group by r.raceName
+            ) as x
+        )
+        ''')
 
     result = mycursor.fetchall()
 
@@ -424,6 +417,51 @@ def query6():
     result = mycursor.fetchall()
 
     print(f"\n====\nResult of your query: \n{result}\n====\n")
+
+def query7():
+    mycursor = mydb.cursor()
+    mycursor.execute('''Select name as Name, surname as surname
+        From Drivers
+        Where driverId NOT IN (
+            Select distinct driverId
+            From Results
+            Where finalPos = 1
+        )
+        ''')
+
+    result = mycursor.fetchall()
+
+    print(f"\n====\nResult of your query: \n{result}\n====\n")
+
+def query8():
+    mycursor = mydb.cursor()
+    mycursor.execute('''Select name, surname
+        From Drivers
+        Where driverId IN (
+            Select driverId
+            From Results
+            Group by driverId
+            Having SUM(points) = 0
+        )
+        ''')
+
+    result = mycursor.fetchall()
+
+    print(f"\n====\nResult of your query: \n{result}\n====\n")
+
+
+def query9():
+    mycursor = mydb.cursor()
+    mycursor.execute('''Select r.raceId, r.raceName, r.raceYear, AVG(p.stopNumber) as AvgPitStops
+        From Races as r, PitStops as p
+        where p.raceId = r.raceId and r.raceYear = 2020
+        Group by r.raceId
+            ''')
+
+    result = mycursor.fetchall()
+
+    print(f"\n====\nResult of your query: \n{result}\n====\n")
+
 
 
 if __name__ == "__main__":
@@ -473,14 +511,17 @@ if __name__ == "__main__":
             continue
         while True:
             if choice == 4:
-                valid_queries = [1,2,3,4,5,6]
+                valid_queries = [1,2,3,4,5,6,7,8,9]
                 queries = int(input('''Choose a query to execute by typing one among the following:\n
-            1 -> Total number of pit stops in 2021 season for Max Verstappen and Lewis Hamilton
-            2 -> Number of fastest laps for Max Verstappen and Lewis Hamilton
-            3 -> Number of pit stops per race for Max Verstappen and Lewis Hamilton in 2021
-            4 -> All drivers who did fewer pit stops than the 2021 World Champion (Max Verstappen)
+            1 -> Total number of pitstops in 2021 season for Max Verstappen and Lewis Hamilton
+            2 -> Total number of pitstops per race for Max Verstappen and Lewis Hamilton in 2021 season
+            3 -> All drivers who did less pitstops than the 2021 World Champion (Max Verstappen)
+            4 -> Given a year, return a list containing the driver who achieved the fastest lap on each circuit
             5 -> All drivers who ran more fastest laps than the 2021 World Champion (Max Verstappen)
             6 -> Drivers' standings for a given season
+            7 -> List of all drivers who have never won a race
+            8 -> List of all drivers who have never scored points in their career in f1
+            9 -> Average number of pitstops per race in a given year
             Type 'back' to go back to menu.
             > '''))
                 if queries == 1:
@@ -494,6 +535,14 @@ if __name__ == "__main__":
                 if queries == 5:
                     query5()
                 if queries == 6:
+                    query6()
+                if queries == 7:
+                    query7()
+                if queries == 8:
+                    query8()
+                if queries == 9:
+                    query9()
+
                     print('\nReturning to main menu.\
                       \n________________________________________________________________')
                     break
