@@ -86,16 +86,30 @@ All drivers who did less pitstops than the 2021 World Champion (Max Verstappen)
 4)
 Given a year, return a list containing the driver who achieved the fastest lap on each circuit
 
-    Select r.racename as GrandPrix, d.name as DriverName, d.surname as DriverSurname, l.ms as Time
+    Select r.racename as GrandPrix, d.name as DriverName, d.surname as DriverSurname, l.ms as ms, sec_to_time(ms/1000) as LapTime
     From Races as r, Drivers as d, Circuits as c, LapTimes as l
-    Where r.raceId = l.raceId and d.driverId = l.driverId and r.circuitId = c.circuitId and r.raceYear = 2020
+    Where r.raceId = l.raceId and d.driverId = l.driverId and r.circuitId = c.circuitId and r.raceYear = 2021
     Group by r.raceName
-    Having l.ms = (
+    Having l.ms in (
         Select x.MinTime
         From (
             Select r.raceName, MIN(l.ms) as MinTime
             From Races as r, Drivers as d, Circuits as c, LapTimes as l
-            Where r.raceId = l.raceId and d.driverId = l.driverId and r.circuitId = c.circuitId and r.raceYear = 2020
+            Where r.raceId = l.raceId and d.driverId = l.driverId and r.circuitId = c.circuitId and r.raceYear = 2021
+            Group by r.raceName
+        ) as x
+    )
+
+    Select r.racename as GrandPrix, d.name as DriverName, d.surname as DriverSurname, l.ms as ms, sec_to_time(ms/1000) as LapTime
+    From Races as r, Drivers as d, Circuits as c, LapTimes as l
+    Where r.raceId = l.raceId and d.driverId = l.driverId and r.circuitId = c.circuitId and r.raceYear = 2021
+    Group by r.raceName, d.name, d.surname, l.ms, r.raceYear
+    Having l.ms in (
+        Select x.MinTime
+        From (
+            Select r.raceName, MIN(l.ms) as MinTime
+            From Races as r, Drivers as d, Circuits as c, LapTimes as l
+            Where r.raceId = l.raceId and d.driverId = l.driverId and r.circuitId = c.circuitId and r.raceYear = 2021
             Group by r.raceName
         ) as x
     )

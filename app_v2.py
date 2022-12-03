@@ -151,7 +151,7 @@ pit_stops_1 = pd.read_csv('archive/pit_stopsRaw.csv')
 circuits = circuits_1.iloc[:, 0:5]
 
 # FROM RACES GET YEAR < 2002
-races = races_1.loc[races_1["year"] > 2002]
+races = races_1.loc[races_1["year"] > 2001]
 races = races.iloc[:,0:7]
 
 # GET LAP TIMES OF OUR RACES
