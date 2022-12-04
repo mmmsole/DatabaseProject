@@ -8,6 +8,12 @@ identifier = input('Databases & Big Data 2022-2023 Project\n'
                    'Group B – Beltrame, Cardile, Miragoli, Mohn.\n\n'
                    'Who are you?\nMariasole (1), Davide (2) or Demetrio (3)?\nIf you are someone else, enter.\n> ')
 
+# FINAL IDENTIFIER:
+#identifier = input('Databases & Big Data 2022-2023 Project\n'
+#                   'Group B – Beltrame, Cardile, Miragoli, Mohn.\n\n'
+#                   'To start the application, please enter.\n')
+
+
 if identifier == '1':
     pw = 'Tazzadargento_90'
     user = 'Mariasole'
