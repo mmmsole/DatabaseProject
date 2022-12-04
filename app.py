@@ -324,7 +324,7 @@ def query01():
             continue
         else:
             mycursor = mydb.cursor()
-            mycursor.execute(f'''Select d.name as Name, d.surname as Surname, d.number as DriverNumber, r.raceYear as Year
+            mycursor.execute(f'''Select d.name as Name, d.surname as Surname, d.driverRef as DriverRef, r.raceYear as Year
                     From PitStops as p, Drivers as d, Races as r
                     Where p.driverId = d.driverId and p.raceId = r.raceId and r.raceYear = {year}
                     Group by d.driverId
@@ -334,24 +334,24 @@ def query01():
                 print(f'\nNo drivers found.\n')
                 break
             else:
-                table = tb(result1, headers=['NAME', 'SURNAME', 'NUMBER', 'YEAR'], tablefmt='psql')
+                table = tb(result1, headers=['NAME', 'SURNAME', 'REF', 'YEAR'], tablefmt='psql')
                 print('Available drivers:\n', table)
                 print(f"Total number of selected rows: {mycursor.rowcount}\n")
                 break
-    num = int(input('\nPlease select the corresponding number of the driver you choose:\n> '))
+    ref = input('\nPlease select the corresponding ref (BETWEEN QUOTATION MARKS) of the driver you choose:\n> ')
     mycursor = mydb.cursor()
-    mycursor.execute(f'''Select d.name as Name, d.surname as Surname, d.number as DriverNumber, r.raceYear as Year, count(p.stopNumber) as NumPitStops
+    mycursor.execute(f'''Select d.name as Name, d.surname as Surname, d.number as DriverNumber, d.driverRef as Ref,  r.raceYear as Year, count(p.stopNumber) as NumPitStops
         From PitStops as p, Drivers as d, Races as r
         Where p.driverId = d.driverId and p.raceId = r.raceId and r.raceYear = {year}
         Group by d.driverId
-        Having d.number = {num}
+        Having d.driverRef = {ref}
         ''')
     result1 = mycursor.fetchall()
     if result1 == []:
         print(f'\nNo data found.\n')
     else:
         print("\nResult of your query: \n")
-        table = tb(result1, headers=['NAME', 'SURNAME', 'NUMBER', 'YEAR', 'PIT STOPS'], tablefmt='psql')
+        table = tb(result1, headers=['NAME', 'SURNAME', 'NUMBER', 'REF','YEAR', 'PIT STOPS'], tablefmt='psql')
         print(table)
         print(f"Total number of selected rows: {mycursor.rowcount}\n")
 
@@ -404,7 +404,7 @@ def query02():
             print('Invalid year!')
         else:
             mycursor = mydb.cursor()
-            mycursor.execute(f'''Select d.name as Name, d.surname as Surname, d.number, r.raceYear as Year
+            mycursor.execute(f'''Select d.name as Name, d.surname as Surname, d.driverRef, r.raceYear as Year
         From PitStops as p, Races as r, Drivers as d, Circuits as c
         Where p.raceId = r.raceId and p.driverId = d.driverId and r.circuitId = c.circuitId and r.raceYear = {year}
         Group by d.driverId
@@ -414,24 +414,24 @@ def query02():
                 print(f'\nNo drivers found.\n')
                 break
             else:
-                table = tb(result1, headers=['NAME', 'SURNAME', 'NUMBER', 'YEAR'], tablefmt='psql')
+                table = tb(result1, headers=['NAME', 'SURNAME', 'REF', 'YEAR'], tablefmt='psql')
                 print('Available drivers:\n', table)
                 print(f"Total number of selected rows: {mycursor.rowcount}\n")
                 break
-    num = int(input('\nPlease select the corresponding number of the driver you choose:\n> '))
+    ref = input('\nPlease select the corresponding ref (BETWEEN QUOTATION MARKS of the driver you choose:\n> ')
     mycursor = mydb.cursor()
-    mycursor.execute(f'''Select d.name as Name, d.surname as Surname, d.number, r.raceYear as Year, r.raceName as GrandPrix, c.name as CircuitName, count(*) as NumPitStops
+    mycursor.execute(f'''Select d.name as Name, d.surname as Surname, d.number, d.driverRef as Ref, r.raceYear as Year, r.raceName as GrandPrix, c.name as CircuitName, count(*) as NumPitStops
         From PitStops as p, Races as r, Drivers as d, Circuits as c
         Where p.raceId = r.raceId and p.driverId = d.driverId and r.circuitId = c.circuitId and r.raceYear = {year}
         Group by r.raceName, d.driverId, CircuitName
-        Having d.number = {num}
+        Having d.driverRef = {ref}
         ''')
     result1 = mycursor.fetchall()
     if result1 == []:
         print(f'\nNo data found.\n')
     else:
         print("\nResult of your query: \n")
-        table = tb(result1, headers=['NAME', 'SURNAME', 'NUMBER', 'YEAR', 'GP', 'CIRCUIT', 'PIT STOPS' ], tablefmt='psql')
+        table = tb(result1, headers=['NAME', 'SURNAME', 'NUMBER', 'REF','YEAR', 'GP', 'CIRCUIT', 'PIT STOPS' ], tablefmt='psql')
         print(table)
         print(f"Total number of selected rows: {mycursor.rowcount}\n")
 
