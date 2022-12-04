@@ -4,9 +4,9 @@ and Lewis Hamilton for the victory at the Abu Dhabi grand prix.
 Anyway, this epic battle was far from being unexpected. The whole season was highlighted by fierce battles between the 
 two drivers. Let’s see some insights of such racing fight.
 
-1.	Total number of pitstops in 2021 season for Max Verstappen and Lewis Hamilton (Done)
-2.	Total number of pitstops per race for Max Verstappen and Lewis Hamilton in 2021 season (Done)
-3.  All drivers who did less pitstops than the 2021 World Champion (Max Verstappen) (Done)
+1.	Total number of pit stops in 2021 season for Max Verstappen and Lewis Hamilton (Done)
+2.	Total number of pit stops per race for Max Verstappen and Lewis Hamilton in 2021 season (Done)
+3.  All drivers who did less pit stops than the 2021 World Champion (Max Verstappen) (Done)
 
 Further queries describing the last 20 years of Formula1 in general
 
@@ -15,7 +15,7 @@ Further queries describing the last 20 years of Formula1 in general
 6.	Ranking according to total points of driver with a given nationality (Done)
 7.	List of all drivers who have never won a race (Done)
 8.  List of all drivers who have never scored points in their career in f1 (Done)
-9.  Average number of pitstops per race in a given year
+9.  Average number of pit stops per race in a given year
 10. List all the winners of each race for a given year (Done)
 11. In a f1 race not all the drivers score points, in fact the point-zone
 includes only the first ten positions. In general, one could classify as "epic comeback" the race of a driver
@@ -25,7 +25,7 @@ selected a year, find the drivers who did an "epic comeback" in that season.  (D
 
 
 1)
-Total number of pitstops in 2021 season for Max Verstappen and Lewis Hamilton
+Total number of pit stops in 2021 season for Max Verstappen and Lewis Hamilton
 
 Number of pit stops for Max Verstappen in 2021:
 
@@ -45,9 +45,9 @@ Number of pit stops for Lewis Hamilton in 2021:
 
 
 2) 
-Total number of pitstops per race for Max Verstappen and Lewis Hamilton in 2021 season
+Total number of pit stops per race for Max Verstappen and Lewis Hamilton in 2021 season
 
-Total number of pitstops per race for Max Verstappen in 2021 season:
+Total number of pit stops per race for Max Verstappen in 2021 season:
 
     Select d.name as Name, d.surname as Surname, d.number as DriverNumber, r.raceYear as Year, r.raceName as GrandPrix, c.name as CircuitName, count(*) as NumPitStops
     From PitStops as p, Races as r, Drivers as d, Circuits as c
@@ -55,7 +55,7 @@ Total number of pitstops per race for Max Verstappen in 2021 season:
     Group by r.raceName, d.driverId
     Having d.name = 'Max' and d.surname = 'Verstappen'
 
-Total number of pitstops per race for Lewis Hamilton in 2021 season:
+Total number of pit stops per race for Lewis Hamilton in 2021 season:
 
     Select d.name as Name, d.surname as Surname, d.number as DriverNumber, r.raceYear as Year, r.raceName as GrandPrix, c.name as CircuitName, count(*) as NumPitStops
     From PitStops as p, Races as r, Drivers as d, Circuits as c
@@ -65,7 +65,7 @@ Total number of pitstops per race for Lewis Hamilton in 2021 season:
 
 
 3)
-All drivers who did less pitstops than the 2021 World Champion (Max Verstappen)
+All drivers who did fewer pit stops than the 2021 World Champion (Max Verstappen)
 
     Select d.driverId as DriverId, d.name as Name, d.surname as Surname, d.number as DriverNumber, r.raceYear as Year, count(p.stopNumber) as NumPitStops
     From PitStops as p, Drivers as d, Races as r
