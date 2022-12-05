@@ -689,7 +689,7 @@ if __name__ == "__main__":
                 except errorcode as e:
                     print("Error while connecting to MySQL", e)
                 valid_queries = [0,1,2,3,4,5,6,7,8,9,10,110,101,102]
-                queries = int(input('''Choose a query to execute by typing one among the following:\n
+                queries = int(input('''\nChoose a query to execute by typing one among the following:\n
         1 -> Total number of pitstops in 2021 season for Max Verstappen and Lewis Hamilton (type 101 to choose parameters)
         2 -> Total number of pitstops per race for Max Verstappen and Lewis Hamilton in 2021 season (type 102 to choose parameters)
         3 -> All drivers who did less pitstops than the 2021 World Champion (Max Verstappen)
@@ -697,7 +697,7 @@ if __name__ == "__main__":
         5 -> Ranking according to total points of driver with a given nationality
         6 -> List of all drivers who have never won a race
         7 -> List of all drivers who have never scored points in their career in f1
-        8 -> Average number of pitstops per race in a given year
+        8 -> Average number of pitstops per race in a given year (suggested year greater than 2010)
         9 -> All the winners of each race for a given year
         10 -> The drivers who did an "epic comeback" in a given season (Type 110 to get more info)
         Type 0 to go back to menu.
