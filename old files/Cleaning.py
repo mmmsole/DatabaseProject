@@ -1,11 +1,11 @@
 import pandas as pd
 
-circuits_1 = pd.read_csv('archive/circuitsRaw.csv')
-drivers_1 = pd.read_csv('archive/driversRaw.csv')
-races_1 = pd.read_csv('archive/racesRaw.csv')
-results_1 = pd.read_csv('archive/resultsRaw.csv')
-lap_times_1 = pd.read_csv('archive/lap_timesRaw.csv')
-pit_stops_1 = pd.read_csv('archive/pit_stopsRaw.csv')
+circuits_1 = pd.read_csv('../archive/circuitsRaw.csv')
+drivers_1 = pd.read_csv('../archive/driversRaw.csv')
+races_1 = pd.read_csv('../archive/racesRaw.csv')
+results_1 = pd.read_csv('../archive/resultsRaw.csv')
+lap_times_1 = pd.read_csv('../archive/lap_timesRaw.csv')
+pit_stops_1 = pd.read_csv('../archive/pit_stopsRaw.csv')
 
 # GET ALL CIRCUITS
 circuits = circuits_1.iloc[:, 0:5]

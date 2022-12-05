@@ -604,6 +604,7 @@ def query10():
 
 
 if __name__ == "__main__":
+
     global db_name, mydb, year
 
     year = 2021  # default for queries
@@ -613,10 +614,8 @@ if __name__ == "__main__":
                        'Group B – Beltrame, Cardile, Miragoli, Mohn.\n\n'
                        'To start the application, please enter.'
                        )
-
     user = input('\nWhat is your name?\n> ')
     pw = input('Enter your MySQL password, please.\n> ')
-
     param = input('\nDefault host is "localhost" and default MySQL username is "root".\n'
                   'If you do not wish to change them, enter. Otherwise, press any key and enter.')
 
@@ -633,6 +632,7 @@ if __name__ == "__main__":
                                    auth_plugin='mysql_native_password')
 
     print(f"\nWelcome to our project, {user}!\n")
+
     while True:
         valid_choices = [1,2,3,4,5]
         choice = int(input('''        MENU
