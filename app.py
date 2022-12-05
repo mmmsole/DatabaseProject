@@ -3,34 +3,6 @@ from mysql.connector import Error, errorcode
 import pandas as pd
 from tabulate import tabulate as tb
 
-db_name = 'f1_db'
-identifier = input('Databases & Big Data 2022-2023 Project\n'
-                   'Group B – Beltrame, Cardile, Miragoli, Mohn.\n\n'
-                   'Who are you?\nMariasole (1), Davide (2) or Demetrio (3)?\nIf you are someone else, enter.\n> ')
-
-# FINAL IDENTIFIER:
-#identifier = input('Databases & Big Data 2022-2023 Project\n'
-#                   'Group B – Beltrame, Cardile, Miragoli, Mohn.\n\n'
-#                   'To start the application, please enter.\n')
-
-
-if identifier == '1':
-    pw = 'Tazzadargento_90'
-    user = 'Mariasole'
-elif identifier == '2':
-    pw = 'ciaociao'
-    user = 'Davide'
-elif identifier == '3':
-    pw = '#MySQLDemi2022'
-    user = 'Demetrio'
-else:
-    user = input('What is your name?\n> ')
-    pw = input('Enter your password, please.\n> ')
-
-mydb = mysql.connector.connect(host='localhost',
-                                   user='root',
-                                   password=pw,
-                                   auth_plugin='mysql_native_password')
 
 def load_data():
     try:
@@ -84,7 +56,6 @@ Drivers = (
           driverId INT PRIMARY KEY,
           driverRef VARCHAR(40) UNIQUE,
           number INT,
-          code VARCHAR(20),
           name VARCHAR(80),
           surname VARCHAR(80),
           dateOfBirth DATE,
@@ -172,7 +143,7 @@ results = results_1[results_1['raceId'].isin(races['raceId'])]
 results = results.iloc[:,[0,1,2,5,6,9,13]]
 
 drivers = drivers_1[drivers_1['driverId'].isin(lap_times['driverId'])]
-drivers = drivers.iloc[:,:-1]
+drivers = drivers.iloc[:,[0,1,2,4,5,6,7]]
 
 
 def insert_circuits():
@@ -195,12 +166,12 @@ def insert_drivers():
     mycursor = mydb.cursor()
     try:
         for i, row in drivers.iterrows():
-            sql = f"INSERT INTO {db_name}.DRIVERS VALUES (%s,%s,%s,%s,%s,%s,%s,%s)"
+            sql = f"INSERT INTO {db_name}.DRIVERS VALUES (%s,%s,%s,%s,%s,%s,%s)"
             for x in range(len(row)):
                 if row[x] == r'\N':
                     row[x] = None
             mycursor.execute(sql, tuple(
-                [row['driverId'], row['driverRef'], row['number'], row['code'], row['forename'], row['surname'],
+                [row['driverId'], row['driverRef'], row['number'], row['forename'], row['surname'],
                  row['dob'], row['nationality']]))
             mydb.commit()
         print('Drivers inserted')
@@ -288,8 +259,6 @@ def insert_pit_stops():
         else:
             print(e)
 
-year = 2021 # default for queries
-
 
 def query1():
     mycursor = mydb.cursor()
@@ -317,7 +286,7 @@ def query1():
     print(f"Total number of selected rows: {mycursor.rowcount}\n")
 
 
-def query01():
+def query101():
     global year
     while True:
         try:
@@ -367,14 +336,6 @@ def query01():
         print(f"Total number of selected rows: {mycursor.rowcount}\n")
 
     #alternative method
-#    name = input('\nPlease select name and surname of the driver:\n(format: "Name Surname")\n> ')
-#    name = name.split()
-#    mycursor = mydb.cursor()
-#    mycursor.execute(f'''Select d.name as Name, d.surname as Surname, d.number as DriverNumber, r.raceYear as Year, count(p.stopNumber) as NumPitStops
-#        From PitStops as p, Drivers as d, Races as r
-#        Where p.driverId = d.driverId and p.raceId = r.raceId and r.raceYear = {year}
-#        Group by d.driverId
-#        Having d.name = '{name[0]}'  and d.surname = '{name[1]}
 
 
 def query2():
@@ -403,7 +364,7 @@ def query2():
     print(f"Total number of selected rows: {mycursor.rowcount}\n")
 
 
-def query02():
+def query102():
     global year
     while True:
         try:
@@ -489,40 +450,6 @@ def query4():
         else:
             break
     mycursor = mydb.cursor()
-    mycursor.execute(f'''Select r.racename as GrandPrix, d.name as DriverName, d.surname as DriverSurname, l.ms as ms, sec_to_time(ms/1000) as LapTime
-        From Races as r, Drivers as d, Circuits as c, LapTimes as l
-        Where r.raceId = l.raceId and d.driverId = l.driverId and r.circuitId = c.circuitId and r.raceYear = {year}
-        Group by r.raceName, d.name, d.surname, l.ms, r.raceYear
-        Having l.ms in (
-            Select x.MinTime
-            From (
-                Select r.raceName, MIN(l.ms) as MinTime
-                From Races as r, Drivers as d, Circuits as c, LapTimes as l
-                Where r.raceId = l.raceId and d.driverId = l.driverId and r.circuitId = c.circuitId and r.raceYear = {year}
-                Group by r.raceName
-            ) as x
-        )
-        ''')
-    result1 = mycursor.fetchall()
-    print("\nResult of your query: \n")
-    table = tb(result1, headers=['RACE', 'NAME', 'SURNAME', 'MS', 'TIME'], tablefmt='psql')
-    print(table)
-    print(f"Total number of selected rows: {mycursor.rowcount}\n")
-
-
-def query5():
-    global year
-    while True:
-        try:
-            year = int(input('\nPlease select a year from 2002 to 2022:\n> '))
-        except:
-            print('Invalid year!')
-            continue
-        if year < 2002 or year > 2022:
-            print('Invalid year!')
-        else:
-            break
-    mycursor = mydb.cursor()
     mycursor.execute(f'''Select  d.name, d.surname, sum(res.points) as Standings
         From Drivers as d, Results as res, Races as r
         Where d.driverId = res.driverId and r.raceId = res.raceId and r.raceYear = {year}
@@ -536,7 +463,7 @@ def query5():
     print(f"Total number of selected rows: {mycursor.rowcount}\n")
 
 
-def query6():
+def query5():
     while True:
         nat = input('\nPlease select a nationality:\n> ')
         if nat == '':
@@ -559,7 +486,8 @@ def query6():
         print(table)
         print(f"Total number of selected rows: {mycursor.rowcount}\n")
 
-def query7():
+
+def query6():
     mycursor = mydb.cursor()
     mycursor.execute('''Select name as Name, surname as surname
         From Drivers
@@ -575,7 +503,8 @@ def query7():
     print(table)
     print(f"Total number of selected rows: {mycursor.rowcount}\n")
 
-def query8():
+
+def query7():
     mycursor = mydb.cursor()
     mycursor.execute('''Select name, surname
         From Drivers
@@ -593,7 +522,7 @@ def query8():
     print(f"Total number of selected rows: {mycursor.rowcount}\n")
 
 
-def query9():
+def query8():
     global year
     while True:
         try:
@@ -621,7 +550,7 @@ def query9():
         print(f"Total number of selected rows: {mycursor.rowcount}\n")
 
 
-def query10():
+def query9():
     global year
     while True:
         try:
@@ -647,7 +576,7 @@ def query10():
         print(f"Total number of selected rows: {mycursor.rowcount}\n")
 
 
-def query11():
+def query10():
     global year
     while True:
         try:
@@ -673,8 +602,36 @@ def query11():
         print(f"Total number of selected rows: {mycursor.rowcount}\n")
 
 
-
 if __name__ == "__main__":
+    year = 2021  # default for queries
+    db_name = 'f1_db'
+    identifier = input('Databases & Big Data 2022-2023 Project\n'
+                       'Group B – Beltrame, Cardile, Miragoli, Mohn.\n\n'
+                       'Who are you?\nMariasole (1), Davide (2) or Demetrio (3)?\nIf you are someone else, enter.\n> ')
+
+    # FINAL IDENTIFIER:
+    # identifier = input('Databases & Big Data 2022-2023 Project\n'
+    #                   'Group B – Beltrame, Cardile, Miragoli, Mohn.\n\n'
+    #                   'To start the application, please enter.\n')
+
+    if identifier == '1':
+        pw = 'Tazzadargento_90'
+        user = 'Mariasole'
+    elif identifier == '2':
+        pw = 'ciaociao'
+        user = 'Davide'
+    elif identifier == '3':
+        pw = '#MySQLDemi2022'
+        user = 'Demetrio'
+    else:
+        user = input('What is your name?\n> ')
+        pw = input('Enter your password, please.\n> ')
+
+    mydb = mysql.connector.connect(host='localhost',
+                                   user='root',
+                                   password=pw,
+                                   auth_plugin='mysql_native_password')
+
     print(f"\nWelcome to our project, {user}!\n")
     while True:
         valid_choices = [1,2,3,4,5]
@@ -731,19 +688,18 @@ if __name__ == "__main__":
                         mycursor.execute("USE " + db_name)
                 except errorcode as e:
                     print("Error while connecting to MySQL", e)
-                valid_queries = [0,1,2,3,4,5,6,7,8,9,10,11,110,101,102]
+                valid_queries = [0,1,2,3,4,5,6,7,8,9,10,110,101,102]
                 queries = int(input('''Choose a query to execute by typing one among the following:\n
         1 -> Total number of pitstops in 2021 season for Max Verstappen and Lewis Hamilton (type 101 to choose parameters)
         2 -> Total number of pitstops per race for Max Verstappen and Lewis Hamilton in 2021 season (type 102 to choose parameters)
         3 -> All drivers who did less pitstops than the 2021 World Champion (Max Verstappen)
-        4 -> Given a year, return a list containing the driver who achieved the fastest lap on each circuit
-        5 -> Drivers' standings for a given season
-        6 -> Ranking according to total points of driver with a given nationality
-        7 -> List of all drivers who have never won a race
-        8 -> List of all drivers who have never scored points in their career in f1
-        9 -> Average number of pitstops per race in a given year
-        10 -> All the winners of each race for a given year
-        11 -> The drivers who did an "epic comeback" in a given season (Type 110 to get more info)
+        4 -> Drivers' standings for a given season
+        5 -> Ranking according to total points of driver with a given nationality
+        6 -> List of all drivers who have never won a race
+        7 -> List of all drivers who have never scored points in their career in f1
+        8 -> Average number of pitstops per race in a given year
+        9 -> All the winners of each race for a given year
+        10 -> The drivers who did an "epic comeback" in a given season (Type 110 to get more info)
         Type 0 to go back to menu.
         > '''))
                 if queries == 1:
@@ -766,17 +722,15 @@ if __name__ == "__main__":
                     query9()
                 if queries == 10:
                     query10()
-                if queries == 11:
-                    query11()
                 if queries == 110:
                     print('''\nIn a f1 race not all the drivers score points, in fact the point-zone includes only the first ten positions. 
 In general, one could classify as "epic comeback" the race of a driver who started not in point-zone,
 and ended the race on podium. Hence, once selected a year, find the drivers who did an "epic comeback" in that season. 
                     ''')
                 if queries == 101:
-                    query01()
+                    query101()
                 if queries == 102:
-                    query02()
+                    query102()
                 if queries == 0:
                     print('\nReturning to main menu.\n')
                     break
