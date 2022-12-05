@@ -1,13 +1,19 @@
+### Databases and Big Data 2022-2023
+## PROJECT – Group B
+
+# Formula 1 World Championship 2002 - 2022 data
+
+
 We provided one single ".py" file, namely "app.py", containing the code to create the tables, populate them and run the queries.
 The application is designed to run on both any IDE you may decide to use, and directly on the terminal. Let's see how to handle the app 
 in both cases.
 
-USING THE TERMINAL
+### USING THE TERMINAL
 1)
-- open a terminal (cmd, Powershell, etc.)
-- if not already done, install the libraries we used in the application (MYSQL.CONNECTOR, Pandas, tabulate)
-- cd to the directory where you saved the folder
-- run "py app.py"/"python app.py"
+- Open a terminal (cmd, Powershell, etc.);
+- if not already done, install the libraries we used in the application (MYSQL.CONNECTOR, Pandas, tabulate);
+- cd to the directory where you saved the folder;
+- run "py app.py"/"python app.py".
 
 2)
 Then, you will be required to insert your name and the password through which you get connected to MySQL.
@@ -18,7 +24,7 @@ Then, by selecting option 4 (run queries), you will access a sub-menu showing al
 number of the desired query. Then, once obtained the output, you will end up again on the submenu. Notice that it is possible at any moment to exit
 the application by typing 0 (to come back to menu) and then 5 (quit).
 
-USING AN IDE
+### USING AN IDE
 3)
 Import the folder in any IDE you may decide to use. Open the application ("app.py") and run it by clicking the "run" button. 
 
