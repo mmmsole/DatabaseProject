@@ -3,33 +3,6 @@ from mysql.connector import Error, errorcode
 import pandas as pd
 from tabulate import tabulate as tb
 
-global db_name, mydb, year
-
-year = 2021  # default for queries
-db_name = 'f1_db'
-
-identifier = input('Databases & Big Data 2022-2023 Project\n'
-                   'Group B – Beltrame, Cardile, Miragoli, Mohn.\n\n'
-                   'To start the application, please enter.'
-                   )
-
-user = input('\nWhat is your name?\n> ')
-pw = input('Enter your password, please.\n> ')
-
-param = input('\nDefault host is "localhost" and default MySQL username is "root".\n'
-              'If you do not wish to change them, enter. Otherwise, press any key and enter.')
-
-if param == '':
-    usr = 'root'
-    hst = 'localhost'
-else:
-    hst = input("\nPlease enter your MySQL host name in order to start the app (Default is 'localhost'): \n> ")
-    usr = input("\nPlease enter your MySQL user name (Default is 'root'):\n> ")
-
-mydb = mysql.connector.connect(host=hst,
-                               user=usr,
-                               password=pw,
-                               auth_plugin='mysql_native_password')
 
 def load_data():
     try:
@@ -456,6 +429,7 @@ def query3():
                 Having d.name = 'Max'  and d.surname = 'Verstappen'
             ) as x
         )
+        ORDER BY NumPitStops DESC   
         ''')
     result1 = mycursor.fetchall()
     print("\nResult of your query: \n")
@@ -630,6 +604,33 @@ def query10():
 
 
 if __name__ == "__main__":
+    global db_name, mydb, year
+
+    year = 2021  # default for queries
+    db_name = 'f1_db'
+
+    identifier = input('Databases & Big Data 2022-2023 Project\n'
+                       'Group B – Beltrame, Cardile, Miragoli, Mohn.\n\n'
+                       'To start the application, please enter.'
+                       )
+
+    user = input('\nWhat is your name?\n> ')
+    pw = input('Enter your MySQL password, please.\n> ')
+
+    param = input('\nDefault host is "localhost" and default MySQL username is "root".\n'
+                  'If you do not wish to change them, enter. Otherwise, press any key and enter.')
+
+    if param == '':
+        usr = 'root'
+        hst = 'localhost'
+    else:
+        hst = input("\nPlease enter your MySQL host name in order to start the app (Default is 'localhost'): \n> ")
+        usr = input("\nPlease enter your MySQL user name (Default is 'root'):\n> ")
+
+    mydb = mysql.connector.connect(host=hst,
+                                   user=usr,
+                                   password=pw,
+                                   auth_plugin='mysql_native_password')
 
     print(f"\nWelcome to our project, {user}!\n")
     while True:
@@ -638,7 +639,7 @@ if __name__ == "__main__":
         Please choose your next action by typing one among the following numbers and enter.
         1 -> Load dataset and create database
         2 -> Use database and create tables
-        3 -> Insert values into tables
+        3 -> Insert values into tables (Warning! This typically takes around 1-5 minutes)
         4 -> Run queries
         5 -> Quit
         > '''))
