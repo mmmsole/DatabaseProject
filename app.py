@@ -344,7 +344,12 @@ def query01():
                 print('Available drivers:\n', table)
                 print(f"Total number of selected rows: {mycursor.rowcount}\n")
                 break
-    ref = input('\nPlease select the corresponding ref (BETWEEN QUOTATION MARKS) of the driver you choose:\n> ')
+    while True:
+        ref = input('\nPlease select the corresponding ref:\n> ')
+        if ref == '':
+            print('Invalid reference!')
+        else:
+            break
     mycursor = mydb.cursor()
     mycursor.execute(f'''Select d.name as Name, d.surname as Surname, d.number as DriverNumber, d.driverRef as Ref,  r.raceYear as Year, count(p.stopNumber) as NumPitStops
         From PitStops as p, Drivers as d, Races as r
@@ -424,13 +429,18 @@ def query02():
                 print('Available drivers:\n', table)
                 print(f"Total number of selected rows: {mycursor.rowcount}\n")
                 break
-    ref = input('\nPlease select the corresponding ref (BETWEEN QUOTATION MARKS of the driver you choose:\n> ')
+    while True:
+        ref = input('\nPlease select the corresponding ref:\n> ')
+        if ref == '':
+            print('Invalid reference!')
+        else:
+            break
     mycursor = mydb.cursor()
     mycursor.execute(f'''Select d.name as Name, d.surname as Surname, d.number, d.driverRef as Ref, r.raceYear as Year, r.raceName as GrandPrix, c.name as CircuitName, count(*) as NumPitStops
         From PitStops as p, Races as r, Drivers as d, Circuits as c
         Where p.raceId = r.raceId and p.driverId = d.driverId and r.circuitId = c.circuitId and r.raceYear = {year}
         Group by r.raceName, d.driverId, CircuitName
-        Having d.driverRef = {ref}
+        Having d.driverRef = '{ref}'
         ''')
     result1 = mycursor.fetchall()
     if result1 == []:
