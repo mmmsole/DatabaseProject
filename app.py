@@ -3,6 +3,13 @@ from mysql.connector import Error, errorcode
 import pandas as pd
 from tabulate import tabulate as tb
 
+global db_name, mydb, year
+
+mydb = mysql.connector.connect(host=hst,
+                               user=usr,
+                               password=pw,
+                               auth_plugin='mysql_native_password')
+
 
 def load_data():
     try:
@@ -44,7 +51,7 @@ def execute_query(connection, query):
 
 
 Circuits = (
-        '''CREATE TABLE CIRCUITS (
+        '''CREATE TABLE IF NOT EXISTS CIRCUITS (
           circuitId INT PRIMARY KEY,
           circuitRef VARCHAR(40),
           name VARCHAR(80),
@@ -52,7 +59,7 @@ Circuits = (
           country VARCHAR(80))
         ''')
 Drivers = (
-        '''CREATE TABLE DRIVERS (
+        '''CREATE TABLE IF NOT EXISTS DRIVERS (
           driverId INT PRIMARY KEY,
           driverRef VARCHAR(40) UNIQUE,
           number INT,
@@ -62,7 +69,7 @@ Drivers = (
           nationality VARCHAR(80))
         ''')
 Races = (
-        '''CREATE TABLE RACES (
+        '''CREATE TABLE IF NOT EXISTS RACES (
           raceId INT PRIMARY KEY,
           raceYear INT,
           raceNumber INT,
@@ -74,7 +81,7 @@ Races = (
                 REFERENCES CIRCUITS (circuitId) ON DELETE CASCADE)
         ''')
 Results = (
-        '''CREATE TABLE RESULTS (
+        '''CREATE TABLE IF NOT EXISTS RESULTS (
           resultId INT PRIMARY KEY,
           raceId INT,
           driverId INT,
@@ -88,7 +95,7 @@ Results = (
             REFERENCES DRIVERS (driverId) ON DELETE CASCADE)
         ''')
 LapTimes = (
-        '''CREATE TABLE LAPTIMES (
+        '''CREATE TABLE IF NOT EXISTS LAPTIMES (
           raceId INT,
           driverId INT,
           lap INT,
@@ -102,7 +109,7 @@ LapTimes = (
             REFERENCES DRIVERS (driverId) ON DELETE CASCADE)
         ''')
 PitStops = (
-        '''CREATE TABLE PITSTOPS (
+        '''CREATE TABLE IF NOT EXISTS PITSTOPS (
           raceId INT,
           driverId INT,
           stopNumber INT,
@@ -603,34 +610,30 @@ def query10():
 
 
 if __name__ == "__main__":
+
+
     year = 2021  # default for queries
     db_name = 'f1_db'
+
+
     identifier = input('Databases & Big Data 2022-2023 Project\n'
                        'Group B – Beltrame, Cardile, Miragoli, Mohn.\n\n'
-                       'Who are you?\nMariasole (1), Davide (2) or Demetrio (3)?\nIf you are someone else, enter.\n> ')
+                       'To start the application, please enter.'
+                       )
 
-    # FINAL IDENTIFIER:
-    # identifier = input('Databases & Big Data 2022-2023 Project\n'
-    #                   'Group B – Beltrame, Cardile, Miragoli, Mohn.\n\n'
-    #                   'To start the application, please enter.\n')
+    user = input('\nWhat is your name?\n> ')
+    pw = input('Enter your password, please.\n> ')
 
-    if identifier == '1':
-        pw = 'Tazzadargento_90'
-        user = 'Mariasole'
-    elif identifier == '2':
-        pw = 'ciaociao'
-        user = 'Davide'
-    elif identifier == '3':
-        pw = '#MySQLDemi2022'
-        user = 'Demetrio'
+    param = input('\nDefault host is "localhost" and default MySQL username is "root".\n'
+                  'If you do not wish to change them, enter. Otherwise, press any key and enter.')
+
+    if param == '':
+        usr = 'root'
+        hst = 'localhost'
     else:
-        user = input('What is your name?\n> ')
-        pw = input('Enter your password, please.\n> ')
+        hst = input("\nPlease enter your MySQL host name in order to start the app (Default is 'localhost'): \n> ")
+        usr = input("\nPlease enter your MySQL user name (Default is 'root'):\n> ")
 
-    mydb = mysql.connector.connect(host='localhost',
-                                   user='root',
-                                   password=pw,
-                                   auth_plugin='mysql_native_password')
 
     print(f"\nWelcome to our project, {user}!\n")
     while True:
