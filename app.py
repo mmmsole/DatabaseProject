@@ -324,7 +324,7 @@ def query101():
         From PitStops as p, Drivers as d, Races as r
         Where p.driverId = d.driverId and p.raceId = r.raceId and r.raceYear = {year}
         Group by d.driverId
-        Having d.driverRef = {ref}
+        Having d.driverRef = '{ref}'
         ''')
     result1 = mycursor.fetchall()
     if result1 == []:
