@@ -5,11 +5,31 @@ from tabulate import tabulate as tb
 
 global db_name, mydb, year
 
+year = 2021  # default for queries
+db_name = 'f1_db'
+
+identifier = input('Databases & Big Data 2022-2023 Project\n'
+                   'Group B – Beltrame, Cardile, Miragoli, Mohn.\n\n'
+                   'To start the application, please enter.'
+                   )
+
+user = input('\nWhat is your name?\n> ')
+pw = input('Enter your password, please.\n> ')
+
+param = input('\nDefault host is "localhost" and default MySQL username is "root".\n'
+              'If you do not wish to change them, enter. Otherwise, press any key and enter.')
+
+if param == '':
+    usr = 'root'
+    hst = 'localhost'
+else:
+    hst = input("\nPlease enter your MySQL host name in order to start the app (Default is 'localhost'): \n> ")
+    usr = input("\nPlease enter your MySQL user name (Default is 'root'):\n> ")
+
 mydb = mysql.connector.connect(host=hst,
                                user=usr,
                                password=pw,
                                auth_plugin='mysql_native_password')
-
 
 def load_data():
     try:
@@ -610,30 +630,6 @@ def query10():
 
 
 if __name__ == "__main__":
-
-
-    year = 2021  # default for queries
-    db_name = 'f1_db'
-
-
-    identifier = input('Databases & Big Data 2022-2023 Project\n'
-                       'Group B – Beltrame, Cardile, Miragoli, Mohn.\n\n'
-                       'To start the application, please enter.'
-                       )
-
-    user = input('\nWhat is your name?\n> ')
-    pw = input('Enter your password, please.\n> ')
-
-    param = input('\nDefault host is "localhost" and default MySQL username is "root".\n'
-                  'If you do not wish to change them, enter. Otherwise, press any key and enter.')
-
-    if param == '':
-        usr = 'root'
-        hst = 'localhost'
-    else:
-        hst = input("\nPlease enter your MySQL host name in order to start the app (Default is 'localhost'): \n> ")
-        usr = input("\nPlease enter your MySQL user name (Default is 'root'):\n> ")
-
 
     print(f"\nWelcome to our project, {user}!\n")
     while True:
